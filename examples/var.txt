@@ -1,0 +1,68 @@
+			Constants and Variables 
+  	Declaring data Variables
+In C all variables are declared before they are used.
+
+This is so that :
+	1.  A memory location is given a name.
+	2.  A suitable number of byte can be allocated.
+	3.  The compiler know how to treat the data.
+
+There are several data types in C :
+
+	Variable type		Number of bits
+	   char				8
+	   int			16 or 32 (usually)
+	short int		      16 (usually)
+	  short			      16 (usually)
+	long int                      32 (usually)
+           long                       32 (usually)
+          float                 about 32
+        double                  about 64
+      long float                about 64
+      long double                   > 64 
+
+1 byte = 8 bits.
+2 byte = 16 bits.
+4 byte = 32 bits.
+8 byte = 64 bits.
+16 byte = 128 bits.
+
+	The format of Variables Declaration
+
+Variable names must obey the following rules:
+	1.  Names can consist of letters, digits, "_"
+
+	2.  Names must start with a letter
+
+	3.  Names must start with the "_", underscore character but
+	    this is not recommended as many system macros and functions
+	    are given names in this format
+
+	4.  Case is sensitive, ie. Xyz is not the same as xyz
+
+	5.  Names must not clash with the C keywords
+
+
+ A variable must consist of : 
+	keywords 	identifiers 	operator	initialization
+	 int		  name		  =		100
+     	char		   fn		  =		stanley
+
+		
+		what is a variable ?
+ A variable is simply  a memory address
+
+There are two ways of declaring a variable:
+ 
+1. Global variable
+2. Local variable
+
+Global variable: 
+	are variables that are visible to the entire programme.
+
+Local variable:
+	are variables that are only visible to the function 
+	where they are declared and defined.
+
+
+ 

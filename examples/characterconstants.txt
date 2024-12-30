@@ -1,0 +1,20 @@
+		CHARACTER CONSTANTS
+
+ Can be either single character in primes (e.g : 'A') or portable representation 
+of "odd" characters.
+
+e.g :
+	'\n'		newline
+	'\r'            carriage return
+	'\f'            form feed
+	'\t'		tab
+	'\b'		backspace
+	'\a'		audiable alarm (beep)
+	'\0'		null
+	'\\'		backslash
+	'\''		prime
+
+ Any character can be represented by \  followed by an octal ASCII
+ value of up to three digits.
+ASCII stands for American standard code for information interchange. 
+

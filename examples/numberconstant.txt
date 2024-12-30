@@ -1,0 +1,49 @@
+		NUMBER CONSTANT
+
+  Number constant are assumed to be signed decimal integers
+
+1	start with a zero, the number is an unsigned integer 
+	e.g 0456
+
+2	starts with 0x or 0X, the number is an unsigned hexadecimal integer
+	e.g 0xa7f, 0Xabc
+
+3	Are too big to fit into a signed integer (or unsigned integer
+	if octal or hexadecimal) then the constant type is a signed 
+	long integer (or unsigned long integer if octal or hexadecimal)
+
+4	Have an L or l suffix, the number is a signed long integer
+	e.g 42L, 99l,.
+
+5	Have a U or u suffix, the number is an unsigned integer 
+	e.g 42U, 99u
+
+6	Have both a U and an L suffix (or u and l), the number is an 
+	unsigned long integer e.g 42UL, 99ul
+
+7	Contain a decimal point or scientific 'e' notation, the number 
+	is of type double e.g 7.3, 42e-1, 12.34E-4
+
+8	Contains a  decimal point or scientific 'e' notation and an F
+	or f suffix the number is of type float e.g 7.3F, 42e-lf
+
+9	contain a decimal point or scientific 'e' notation and an L
+	or l suffix, the number is of type long float e.g 7.3L, 42e-l
+
+ 
+signed keyword :
+	are number with negative (-1 to - infinite) and positive (0 to infinity) 
+
+unsigned keyword :
+	are number with only positive numbers which is 0 to infinity
+
+Base numbers are :
+
+1 : 	Base 2 --> which is binary (0 and 1)
+
+2 :	Base 8 --> which is octal (0 to 7)
+
+3 :	Base 10 --> which is decimal (0 to 9)
+
+4 :	Base 16 --> which is hexadecimal (0 to 9 and a to f)
+

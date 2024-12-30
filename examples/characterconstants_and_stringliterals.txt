@@ -1,0 +1,24 @@
+	CHARACTER CONSTANTS AND STRING CONSTANTS 
+
+Characters represented with the \ notation can also be used in string.
+Strings are enclosed between " " and have an implied null character at the end.
+
+e.g : "\a this text starts with a beep\nand covers two line "
+
+constants cannot be spread over more than one line. However if the compiler
+finds two strings constant with only space or new line in between it will
+automatically concatenate the string together. 
+
+e.g :	"hello the"
+	
+
+note that a single character given between ' ' is not the same as a string of one 
+character 
+i.e 'A' is not the same as "A" 
+
+A single character in ' ' can be regarded as a means of expressing 
+a number value corresponding to the ASCII value of the character
+
+i.e 'A' is equivalent to '\101' or '\x41' and also 65
+
+

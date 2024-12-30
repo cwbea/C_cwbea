@@ -1,0 +1,126 @@
+		INTRODUCTION TO SIMPLE INPUT AND OUTPUT STATEMENTS
+
+	INTRODUCTION TO INPUT AND OUTPUT 
+Unlike most other programming languages, there are no in-built input or output statement
+in the C language. This means that all input and output must be done by calling functions.
+At least some of which must be written in a language other than C. 
+There is, however a standard library of functions that allows I/O to be done in a relatively 
+uniform manner for all C implementations without the need to know how it is being done in any 
+particular case. This standard library is known as the "stdio" to use the function within this 
+library it is necessary to insert the following processor statements at the start of the program 
+source code. 
+e.g :	#include <stdio.h>
+
+The following functions are part of the stdio library :
+
+getchar		for reading single characters from the standard input, usually the keyboard.
+
+gets		for reading a whole line of characters from the standard input usually the keyboard.
+
+putchar		for writing single characters to the standard output usually the screen.
+
+printf		for writing more complex, formatted output to the standard output. 
+
+Functions getchar, putchar and printf are described in this section and gets in the next section as
+they are used extensively in the program examples in the rest of this book. Further details of these 
+and the  many other inputs and output functions are given in part C of this book
+
+THE getchar() FUNCTION
+This function is used as follows :
+	abc = getchar();
+
+This will get a character of the keyboard, waiting as long as required for a key to be pressed. 
+
+When the character is found it's corresponding bit pattern (usually the ASCII value) is assigned 
+to abc. 
+
+If the function encounters an error, such as an end of file marker, it returns the value (EOF)
+this type of error is usually from  a keyboard. EOF is a constant defined in the stdio.h header 
+file described in section C. 
+
+
+EOF is quaivalent to -1 from most systems. 
+
+It is possible to use getchar without assigning the result value to any variable, such as in the statement.
+		getchar();
+
+this will wait for a key to be pressed but it will discard the value so obtained. This could be used in a 
+program that gives message. "hit any key to continue".
+
+putchar(character);
+putchar ouputs a character to the screen as follows : 
+	putchar(character_expression);
+
+e.g :
+	int Fred = 65;
+	putchar('x');
+	putchar(Fred);
+	
+Note :
+1.	putchar('x'); is not the same as putchar(x); the former outputs the character 'x'. 
+
+	the letter looks at the variable called x and prints the character with a bit pattern 
+	that corresponds to the value stored in x. 
+
+2.	'x' is not the same as "x" 
+	
+	"x" is a string as used in printf.
+
+3.	putchar(2); will not put a 2 onto the screen 
+
+	the bit pattern of  the number 2 does not correspond to the ASCII character that is "printable".
+
+	i.e nothing will appear on the screen.
+
+	to use putchar to output the digit 2 , the character '2' must be used (with the corresponding ASCII value 
+	of 50).
+
+
+printf(format, values);
+printf output a  string characters to the screen. 
+e.g :	printf("\n hello world");
+
+Note :
+1.	A string is a collection of one or more characters with a hidden zero byte at the end.
+
+2.	A string with one character in it is not the same as single character. 
+
+	double quotes, " " enclosed a string, single quote ' ' enclosed a character.
+
+3.	The \n  in the above example makes for the new line...
+
+	...otherwise it will have continued where it previously left off.
+
+4.	If the string contains the %d, output is modified by substituting the value of the next parameter in place of 
+	the %d.
+
+	for each further %d another parameter value is substituted. 
+
+	e.g	printf(" add %d and %d to get %d. ", a, b, a+b);
+
+	Note that an expression can be used for a printf parameter as in a+b 
+
+
+printf SUBSTITUTION TYPES 
+Wherever a % is found in the printf output string, the next character will dictate what will be 
+substituted. 
+e.g %d will substitute the decimal value of the next parameter.
+
+Other % character substitutions cause the next parameters to be interpreted in different forms.
+%u	output as an unsigned decimal number 
+%o	outputs as an octal number
+%x	outputs as a hexadecimal number
+%c	outputs as a character 
+%s	outputs as a string
+%f	outputs as a real number with six decimal places
+%e	outputs as a real number in scientific notation
+%g	outputs as a real number in ordinary or scientific notation, whichever takes the least space.
+%d	outputs as an integer number 
+%i	outputs as an integer number also
+%%	outputs a '%' character 
+
+Note : It is up to the programmer to ensure the printf has suitable parameters so that sensible 
+	output can be achieved.
+
+
+printf SUBSTITUTION MODIFIER   

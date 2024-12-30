@@ -1,0 +1,37 @@
+			INITIALISATION OF VARIABLES
+ 
+ A variable can be initialised (given a starting value) when it is declared by setting
+it equal to a constant value or expression. Note the variable is a memory address. 
+
+e.g : 
+	char alphabet_lowercase = 'a';
+	char alphabet_uppercase = 'A';
+	int number_one = 97;
+	int number_two = 65;
+	float pi = 3.14;
+	float fraction = 10/3 
+
+Initialisations can be mixed with other declarations 
+
+e.g : 
+	char alphabet_lowercase, alphabet_uppercase;
+	int number_one, number_two;
+	float pi, fraction;
+
+If a variable is not initialised then :
+
+	global variables are initialised by default to zero. 
+
+	local variables declared inside a main or any other function, will have a random
+	starting value. i.e There is NO default initialisation in local variables.
+			i.e They will NOT have a starting value of zero.
+
+
+
+Note :  
+	initialisation of local variables does not need to be a constant. 
+		e.g 	char ch = getchar();
+	this will get the starting value from the keyboard.
+
+	Note also that local variables designated are static or extern have different initialisation
+	properties. These are described later in section 11 on storage classes.

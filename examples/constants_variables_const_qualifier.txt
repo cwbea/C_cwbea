@@ -1,0 +1,76 @@
+		"CONSTANT" VARIABLES AND THE CONST QUALIFIERS
+
+ A variable may be declared as constant using const qualifier.
+
+e.g : 
+	const double pi = 3.14159;
+	const int year_length = 365;
+	const int TRUE = 1; 
+	const int FALSE = 0;
+
+Once declared, these variables cannot have any value assigned to them or be changed
+in any other way, but they can be used in expressions.
+
+e.g : 
+	pi = 1.234;		/* illegal */
+	cwbea = 2*pi*rad;	/* ok */
+	y = year_length;	/* ok */
+	year_length = 365;	/* illegal */
+
+It follows that const variables MUST be initialised  to be of any use.
+
+const variables are used to make a program more readable. They also make 
+a program easier to maintain if the constant needs to be changed in later 
+version of the program. If the numeric value has been used the change may
+need to be made in many places in the code some of which could possibly be
+missed. The use of a const variable means that only one line needs to be 
+changed to alter the constant value throughout the program.
+
+Exercise 1
+
+Which of the following data definition statements are illegal and why?
+
+	int			Alf, Bert = 4, Cleo = 4.3, Doris = 'D';
+	char			Eric = 257, Eric_Again, 3rd_Eric;
+	short			Default, Default_value, default, default2;
+	long			int, Fred = 123456789;
+	float			x = 123.456, Y = 100 e-6;
+	unsigned 		negative = -1;
+	const int 		three = 4, Max, Eric = 0;
+	unsigned float		George = 1.234;
+
+
+Exercise 2
+
+If a programme has only the following data definition, all of which are inside 
+the main function :
+	int		Ada, Bill = 4, cwbea;
+	char		letter = 'A', digit = '1';
+	float		Xvalue = 258.34, Yvalue;
+	unsigned	val;
+	const char	cw = 'A';
+	
+which of the following assignments are illegal and why?
+	Bill = Ada;
+	Ada = 0xAda;
+	Bill = letter;
+	Ada  = digit;
+	Bill = cwbea;
+	digit = 66;
+	digit = '\102';
+	digit = 0102;
+	letter = '\9';
+	letter = "A";
+	letter = cw;
+	Xvalue = 12.345;
+	Xvalue = 1234.5 e-2;
+	yvalue = Xvalue;
+	val = 0177777U;
+	cw = 100;
+	cw = 'A';
+	
+
+Constant variables identifiers SHOULD ideally be in uppercase.
+
+
+

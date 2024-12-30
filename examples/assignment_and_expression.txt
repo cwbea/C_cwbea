@@ -1,0 +1,401 @@
+				ASSIGNMENT AND EXPRESSION
+
+The simple assignment operator is --> =
+
+e.g : 	total = 42;
+
+	fred = joe;
+
+	count = count + 1;
+
+The right hand side of the assignment can be a constant, another variable or an expression
+			
+			
+
+			ARITHMETIC OPERATORS
+
+Arithmetic operators can use any of the following operators (given in order of precedence) :
+
+
+	- ~			unary negation, once complement		(highest precedence)
+	* / % 			multiplication, division, modulus
+	+ -			Addition, subtraction
+	<< >>			left and right shift
+	& | ^			bitwise 'and', 'or', 'exclusive or'	(lowest precedence)
+
+With the exception of the two unary operators (- and  ~), all arithmetic operators group from
+left to right where precedence is equal, the unary operators group from right to left.
+
+e.g 	a/b*c	is equivalent to   (a/b) * c
+	- ~a	is equivalent to   -(~a)
+	
+
+
+		NOTE ON ARITHMETIC OPERATORS
+
+1		() can be used in the usual way in an expression to override the natural
+		precedence of operators.
+		e.g 	a*(b+3)		1/(a+b)
+
+2		The mathematical use of  () with * is not valid.
+
+		e.g 	invalid		2(a+b)		(a+b)  (c+d)
+			valid		2*(a+b)		(a+b) * (c+d)
+
+3		The ~ operator gives the complement of an integer. i.e  all bits reserved.
+		this is NOT the same as negating the value, though it is only different
+		by a value of one. 
+		i.e 	~x has the same value as -x  - 1
+
+
+4		The modulus operator, %, gives the remainder after one integer is divided
+		by another.
+		e.g 	11%3   gives a result of 2.
+
+
+5		+ - * / are the only arithmetic operators that can be used with float and 
+		double quantities. 
+
+6		There are many other operators in C those will be given later
+
+
+
+			DIVIDING INTEGERS
+
+The division operator, / used with integer always yields an integer answer 
+	i.e the  fraction part is dropped 
+	e.g 8/3 gives an integer result of 2
+
+Therefore if cwbea and pen are integer variables then :
+	cwbea = 8;		/*set cwbea to 8 */
+	pen = 3;		/*set pen to 3 */
+	cwbea = cwbea/pen;      /*set cwbea to 2 */
+	
+This is true even if the result is put into a real variable.
+	i.e if cwbea is 8 and pen is 3 and x is a real variable :
+		x = cwbea/pen 	/*this would set x to 2.0 */
+
+This is because C does the  calculation first and decides where it would put the
+answer afterwards. It converts the answer to 2.0 from the integer result of 2 calculated
+from the expression. 
+
+If / is used with real number or a mixture of real and integer, the result is the 
+expected floating value.
+	i.e if either cwbea or pen had been real the result in x would have been 2.6667
+
+			
+			
+		
+
+			SHIFT OPERATORS 
+
+The shift operators can only be used with integer variables (i.e char, int, short, long).
+The use of an expression is as follows :
+ 
+	integer_value <<  amount	(left shift)
+		OR
+	integer_value >> amount		(right shift)
+
+where :
+	integer_value is the item to be bitwise shifted
+	amount        is the number of one bit shift to make 
+
+a left shift looses the leftmost bit and fills the right most bit with zeros
+	e.g 0xf83d << 4		yields 0x83d0
+
+A right shift looses the rightmost bit and fills the leftmost bit with either 
+zeros or ones. If the original variable value is negative the leftmost bit are filled
+with ones otherwise they are filled with zeros (though this may depend on the compiler).
+This copies the sign bit ensuring the sign of the original value is preserved. Unsigned 
+integer should always have the leftmost bit filled with zeros. 
+e.g	if cwbea is an integer variable of value 0xe83d, then the expression : 
+		cwbea >> 4
+	will give : 	0xe83 if cwbea is unsigned.
+			0xfe83 if cwbea is signed (on most compilers).
+
+ 
+
+			BITWISE OPERATORS ~ & | ^
+
+ These operators, like the shift operators are used for manipulating individual bits
+in bytes and words. Like the shift operators they can be used on char variables, and 
+long, short or normal integers whether signed or not. 
+ 
+ These operators are not available in most high level languages. They help give C it's
+power as an operating system language.
+
+The (tilde) ~ is an unary operator requiring only one operand, the other bit manipulation 
+operations requires two operands. 
+
+	THE ~ OPERATOR 
+~ flips all the bits in an integer. 
+	i.e if cwbea has binary value :   0110001110110010
+	then ~cwbea has binary value  :   1001110001001111
+	
+	Note : this is not the same as -cwbea 
+
+	THE & OPERATOR
+ & is the bitwise 'and' operator.
+
+It compares the bits of two variables or constants and gives a result with a bit set
+where it is set in both the first "and" the second operand.
+
+i.e if cwbea has the bits :	0110001110110010
+    and pen has the bits  :     0101010101010101
+    then cwbea & pen      :     0100000100010000
+
+e.g 5 & 4 = 0101 & 0100
+	
+	5 --> 0101
+	4 --> 0100
+	      0100
+ 
+this is useful operator for selectively zeroing bits.
+
+e.g	the expression cwbea & 0xff00 will give a result with :
+	1	all the bits in the left byte the same as those in cwbea.
+	2	all the bits in the right byte set to zero.
+
+
+		THE ^ OPERATOR 
+ 
+  ^ is the bitwise exclusive operator. 
+
+It compares the bits of two variables or constants and gives a result where it is set
+in either the first or the second operand, but not both
+
+i.e	if cwbea has the bits :	0110001110110010
+	and pen has the bits  : 0101010101010101
+       then cwbea ^ pen gives : 0011011011100111
+
+this useful operator for selectively flipping bits.
+
+e.g the expression cwbea ^ 0xff00 will give a result with :
+	1	all the bits in the left byte set to the reverse of those in cwbea.
+	2	all the bits in the right byte are set the same as those in cwbea.
+
+
+			MIXING VARIABLE TYPES
+
+Pascal can be described as a strongly typed language. This means that it does not
+normally allow variable and constants of differing type to be mixed in expressions
+or assignments without explicitly calling a conversion function. C on the other 
+hand is a weakly typed language. Characters, integers and floating point values 
+can be freely mixed in an expression or assignment, with automatic conversion from
+one type to another taking place. 
+
+The next section examines how C handles :
+
+1	A mixture of types in an expression.
+2	An assignment of one variable type to another.
+
+
+			THE C HANDLING OF CHAR AND SHORT VARIABLES 
+Whenever C handles any variable with fewer bits than an int the first thing it does is 
+work out the integer equivalent 
+e.g	the character variable :	01100111
+	is converted to	       :  0000000001100111
+
+	assuming int variable have 16 bits.
+
+But if the leftmost bit is set the spare left bit are filled with 1s
+
+e.g	the char variable :	11001101
+	is converted to	  :  111111111001101
+
+This ensures that negative char values are preserved in value when converted to an int.
+
+Value of type short are treated similarly if they have fewer bits than integers. 
+However, with many compilers short and int values have identity number of bits.
+
+if the variable is an unsigned char or unsigned short the left bit are always filled 
+with zero.
+
+e.g the unsigned char :	11001101
+    is converted to   : 0000000011001101
+
+
+			CONVERTING INT VARIABLES TO CHAR AND SHORT
+ A char or short int is handled by converting to the size of an int because the int is a
+convenient size for the processor to handle. 
+
+if, when the processor has finished dealing with the numbers the results is assigned to
+a char or short variable, the number must be converted once again.
+
+This is simply done by removing the surplus bits on the left.
+
+e.g the int value		     :	0110011100010101
+    is converted to a char value of  :  00010101
+
+this occurs whether the variable are signed or unsigned
+
+i.e	if the variable were a result to be stored as not enough bits ... too bad ...
+        some will be lost 
+
+it is one of the features of C that errors on this type can occur without warning ...
+other languages such as PASCAL would have either reported the error or not allowed the
+operation in the first place.
+
+
+			MIXTURE OF VARIABLE TYPES IN EXPRESSIONS
+
+C allows mixture of variable types in expression.
+
+If C has to handle the expression such as A+B+C then the following rules are applied
+in order :
+
+1	If any of the variables are char or short they will be converted to int.
+
+
+2	If any of the variables are of type long then all char, short and int 
+	variables will be converted to long.
+
+	This is done by adding either 0s or 1s to the left depending on the sign
+        of the variable
+
+3	If any of the variables are unsigned then all signed variables are converted 
+	to unsigned. 
+
+	This does not involve any extra or changed bit, just a change in how the variable
+	is designated. 
+
+4	If any variable is of type float, all integer types are changed to the signed
+	float type.
+
+5	If any variable is of type double, all integer and float variables are changed
+	to the signed double type.
+
+6	Similarly if a long double type exist and is used in the expression then all 
+	other variables are changed to long double.
+
+NB	Many C compilers always convert all float numbers to double no matter what else
+	is in the expression. 
+
+
+
+			MIXED VARIABLE TYPE ASSIGNMENTS 
+
+1.	If a smaller variable type is assigned to a larger type then the conversion is 
+	the same as for mixed types in an expression. 
+
+2	If a large integer type is assigned to a smaller type, the surplus bits on the 
+	 left are lost. 
+
+3	If a signed value is assigned to an unsigned variable or vice-versa the bits pattern
+	is transferred without change.
+
+4	If a double type is assigned to a float type some of the precision (i.e number of 
+	decimal places) is lost. 
+
+	Similarly if a long double is assigned to a double or float type
+	
+5	If a real number is assigned to an integer type the fraction part is lost
+
+
+
+			ASSIGNING NEGATIVE VALUES TO UNSIGNED VARIABLES
+
+A  consequence of the way C converts values in expressions and assignments is that negative 
+values can be assigned to unsigned variables. 
+
+e.g 	Given the declarations 
+
+	int i;
+	unsigned u;
+	double d;
+
+then 
+	u = -1;		/* legal, but u now has the value 65536 */
+	i = u;		/* legal, i now has the value -1 */
+	d = 2.0 * i;	/* d now has the value -2.0 */
+	d = 2.0 * u;	/* d now has value 131072.0 */
+
+
+
+			WARNING! there are no warning
+ 
+The general philosophy in C is that the compiler will ensure that the program carries 
+on as best as it can when types are mixed in any form of expression or assignment. 
+C converts the variables according to its own rules. If information lost through an 
+assignment of one variable type to another, or if a negative value is signed to an 
+unsigned variable, then C will give no errors either during the program's compilation
+or when the program runs. Clearly this lead  to misleading results if care is not 
+taken. 
+
+It is up to you the programmer to ensure that 
+	1	variables are not used in any way that may loose information. 
+
+	2	variables are used in a straightforward way with the minimal 
+		mixing of types so that programmes are cleared to follow and 
+		are easily maintained.
+	
+
+
+			CASTS
+ 
+In some circumstances, it may  be useful to force a type conversion, using a cast,
+that would not normally take place.
+
+A cast takes the form :		(data_type)variable_name
+
+In the example : 
+	int i = 7, j = 2;
+	float x;
+
+	x = i/j;
+
+
+the calculation on the right is done before the variable type of x is even looked at, 
+so the calculation is done with the integer arithmetic. 
+
+i.e 	the result will be 3 which is then converted to 3.0 when it is put in x.
+
+but if the assignment is replaced by : 
+
+	x = (float)i/j;
+or 
+	x = i/(float)j;
+
+then the cast forces conversion of either i or j to type float before evaluation 
+of the expression.
+
+Conversion rules would then convert the other integer in the expression to a float
+variable the result would be of type float and 3.5 would be assigned to x.
+
+
+		
+			DIFFERENT ASSIGNMENT OPERATORS
+
+In C, the = is not the only assignment operator, the following are also available :
+
++=	-=	*=	/=	%=	>>=	<<=	&=	|=	^=
+
+These are used as follows :
+
+	A += 5; 	/* equivalent to A = A + 5; */
+	A *= B;		/* equaivalent to A = A * B; */
+	A <<= 3;	/* equivalent to A = A << 3; */
+	A -= 3;		/* eqivalent to A = A - 3; */
+	A >>= 3;	/* equivalent to A = A >> 3; */
+	A /= 3;		/* equivalent to A = A / 3; */
+	A %= 3;		/* equivalent to A = A % 3; */
+	A &= 3;		/* equivalent to A = A & 3; */
+	A |= 3;		/* equivalent to A = A | 3; */
+	A ^= 3;		/* equivalent to A = A ^ 3; */
+
+These assignement types allows C to compile certain types of statement into more efficient code for
+the computer to execute.
+
+In addition, the most commonly used of these, += and -= can be further abbreviated as follows :
+
+	A += 1;		can be written as either 	A++;	or	++A;
+And 
+	A -= 1;		can be written as either        A--;	or 	--A;
+
+In a simple assignment statement :	++abc;	is equivalent to 	abc++;
+				and 
+					--abc; is equivalent to		abc--;
+
+But their meaning are different when used in embedded statements as explained in the next 
+section    
+         

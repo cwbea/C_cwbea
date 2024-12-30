@@ -1,0 +1,13 @@
+			Assignment
+1. write a simple program using the shift left and shift right arithmetic
+   calculation.
+
+2. write a simple program that follows the precedence of arithmetic operators
+   of + - / *
+
+3. write a simple program that will ignore the precedence of arithmetic operator
+   of + - / *	
+
+4. write a simple program that will produce it's correct answer of decimal number.
+
+5. make sure you comment all of this programmes.

@@ -1,0 +1,301 @@
+			CONTROL FLOW STATEMENTS 
+
+	THE WHILE STATEMENT
+
+The while statement is a simple way  to repeatedly execute one or more statements as long as
+some condtions is "true". 
+
+The syntax is : 	while (expression) statements;
+
+Firstly, expression is evaluated.
+
+If it is false, statements is not executed and control is passed to the next program instruction.
+
+if it is true, statements is executed then expression re-evaluates to decide if statements should be 
+executed again.
+
+e.g :
+ 	i = 0;
+	while (numbers[i] != 0)
+		i++;
+
+Now that this could be re-written.
+
+	i = 0;
+	while (numbers[i++] != 0);
+
+or even 
+
+	i = 0; 
+	while (numbers[i++]); 
+
+in the above examples, the statement following the while condition is simply a blank.
+i.e it does nothing when it is executed. However each time the program goes round the loop,
+the variable i is executed as there is an embedded i++ statement inside the condtion that is evaluated.
+
+Note that, the statement(s) following the condition in a while loop may never be executed if expression evaluates
+to "false" the first time, but if there is a statement embedded in the loop it is executed at least once while the 
+program decides whether it is true or false.
+
+Once again, braces can be used to form a compound statement if more than one statement is to be executed repeatedly.
+
+e.g :
+	total = i = 0;
+	while (numbers[i] != 0) {
+		total + numbers[i];
+		i++;
+	}
+
+
+
+	THE DO .. WHILE STATEMENTS
+
+This is similar to the Repeat..Until construction in PASCAL,in that one or more statements are repeatedly executed until
+some expression at the end of the loop evaluates to false (so execution of the statement(s) takes place at least once).
+
+The syntax is :
+	do 
+		statement
+	while (expression);
+
+e.g :
+	i = 0;
+	do
+		letter[i++] = getchar();
+	while (i<10);
+
+(will read characters from the standard input into the first ten elements of the array letters)
+
+NB. use of braces around one statementin the do while loop, though not essential, will improve program clarity, as the while line
+cannot then be confused with the start of a while statement
+
+e.g :
+	do {
+		letter[i++] = getchar();
+	} while (i<10); 
+ 
+
+
+
+	THE SWITCH STATEMENTS
+
+This can be used to implement a multi-way decision, the syntax being 
+	
+	switch (expression) {
+		case value_1 :	statements (s)
+		case value_2 :  statements (s)
+		....
+		case value_n :  statements (s)
+		default :	statements (s)
+	}
+
+where expression must evaluate, or be convertible, to an integer value and value_1
+to value_n to compile-time integer constants.
+
+Note that the default :  part is optional.
+
+if expression evaluates to value_x the program flow jumps to the  statement with the prefix 
+case value_x : . that statement and all subsequent statements are then executed, unless either 
+a break or continue occurs (mentioned later).
+
+if the value of the expression does not have a corresponding case prefix, the program jumps to 
+statement labelled "default :". If there is no default label and there is no match for the switch
+expression, then the whole switch block is skipped. 
+
+e.g 
+	switch (letter) {
+		case 'a' :	letter_a++;
+		case 'b' :	letter_b++;
+		default :	other_letter++;
+	}
+
+If letter evaluates to 'z', other_letter will be incremented and control passed to the program statement
+following the switch.
+
+So if the earlier example was re- written as :
+
+	switch (letter) {
+		case 'a' :	letter_a++;
+				break;
+
+		case 'b' :	letter_b++;
+				break;
+
+		default :	other_letter++;
+	}
+
+only one of the variable letter_a, letter_b or other_letter would be incremented.
+
+One obvious consequence is that more than one statement (or one particular case) needs not be put inside braces 
+(unlike the equivalent case construct in PASCAL).
+
+Latly, more than one prefix can be attached to a statement.
+
+e.g
+	case 'a' :
+	case 'b' :
+	case 'c' :  letters_a_to_c++;
+
+
+
+	THE FOR STATEMENT
+
+The for statement is a special case of the while statement, particularly useful for 
+processing a number of contiguous array elements. 
+The syntax is :
+
+	for (expression1; expression2; expression3) statements;
+
+this is equivalent to :
+
+	expression1;
+	while (expression2) {
+		statements;
+		expression3;
+	}
+
+it is useful for expression1 to be an initialised assignment to a "control" variable 
+tested in expression2, which is incremented or decremented in expression3.
+
+e.g 
+	total = 0;
+	for (i = 0; i<10; i++)
+		total += numbers[1];
+
+which is equivalent to :
+
+	total = 0;
+	i = 0;
+	while (i>10) {
+		total += numbers[1];
+	}
+
+the loop will continue forever unless there is some statement inside the loop that causes the program
+to break out or halt.
+
+Although it is possible to use unrelated expression in a for loop statement
+
+e.g	for (a = 10; ++b<10; c += [d--] = getchar()) .....;
+
+it is not recommended as it is confusing and difficult to follow.
+
+
+	THE BREAK AND CONTINUE STATEMENT
+
+The break statement already introduced will cause termination of a switch statement.
+it is also terminated while, do, for loop, and is equivalent to an unconditional branch 
+to the statement following the loop.
+
+e.g 
+	for (;;) {
+		ch = getchar();
+		if (ch == '\n') break; /*exit the loop */
+		arr[i++] = ch;
+
+in general it is not a good idea to have more than one exit out of a loop. The break statement should,
+therefore, only be used in do forever loop.
+
+The continue statement can also be used within any loop to cause a break in execution. it causes the
+particular iteration within the loop to terminate, but not the loop itself
+
+e.g 
+	while (i<10) {
+		i++;
+		if (arr[i] == '\n')
+			continue;	/*output all on same line */
+		putchar(arr[i]);
+	}
+
+in general, this statement can easily be avoided. for example, the above is equivalent to :
+
+	while (i<10) {
+		i++;
+		if (arr[i] != '\n') {	/*output on same line*/
+			putchar(arr[i]);
+			number_output++;
+		}
+	}
+
+
+
+	THE COMMA OPERATOR
+
+A , can be used as an operator to separate values in an expression. The compiler will evaluate each value 
+separated by the comma operator but it will only use the last value in evaluating the last expression 
+
+The , is the operator with lowest precedence 
+
+A possible , but rather poor example of the use of the , operator would be 
+
+	fred = (abc << 4, joe + 1, x * y);
+
+in this example C will :
+
+1.	work out the value of abc << 4 but then do nothing with it.
+
+2.	work out the value of joe + 1 but then do nothing with it.
+
+3.	work out the value of x * y 
+
+4.	assign te value of x * y  to fred 
+
+obviously, the evaluation of abc << 4 and joe + 1 in this example is useless and many compiler will give an error
+for this statement. 
+
+The ( ) in the example were neccesary as the , has a lower precedence than the = assignment operator.
+
+The comma  operator is only of use if the expression before the , has some useful side effects such as 
+in an embedded assignment or function call.
+
+This can be particularly useful in for or while expressions :
+
+e.g1	for (i = 0, j = 10; i<j; i++, j--) arr[j] = arr[i];
+
+	This is not a nested loop but a single loop with two counters - it will loop 5 times only.
+
+e.g2	while ((ch1 = getchar(), ch2 = getchar()) != '\n') ...;
+
+	in this loop, two characters are read, the second of which is compared with a new line character
+	to determine when to terminate the loop.
+
+
+
+	THE GOTO STATEMENT 
+
+Although it is well known that there is no need to use jumps or gotos in a well structured program, Every 
+language has some form of goto instruction, and C is no exception.
+
+The general format is :
+
+		goto label;
+	  	.......
+	label :	statements;
+
+
+e.g 
+		goto here;
+		.......
+	here :	x = y;
+
+the label is any alphanumeric name in the same form as variable or function names.
+
+Restriction :
+	it is possible to have a goto from within a set of {} to a label either inside or outside the same {}.
+
+But :
+	it is not possible to have a goto outside a set of {} to a label inside the {}.
+
+it follows that it is not possible to go to a label inside  a different function
+
+
+use of the goto statements :
+
+	it is a well known rule that gotos are a bad thing and should be avoided. Indeed, the use of the goto
+is usually an indication of poorly planned and badly structured code. There are, however, valid use of a goto!
+In general, a goto could be used if the alternative is to produce much more complicated code to avoid the goto.
+An example may be a panic exit out of deeply nested loop and if blocks, where the alternative may be to set up a 
+series of flags that need to be tested at the exit to each block. 
+
+Beware of making excuses for using a goto - the chances are you will be making excuses for badly written code
+
+

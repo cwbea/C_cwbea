@@ -1,0 +1,350 @@
+				CONDITIONAL STATEMENTS
+
+	THE IF STATEMENT
+
+General formats :  If (condition) statement;
+
+The statement is executed if the condition is true.
+
+e.g 	if (abc > xyz) ch = getchar();
+
+The following comparison operators are available :
+
+	>	greater than
+	<	lesser than
+	>=	greater than or equal to 
+	<=	lesser than or equal to 
+	==	equals to
+	!=	not equals to 
+	
+
+e.g 	if (fred == joe + 1) joe++;
+	if (a >= xyz) a = xyz;  
+
+
+	LOGICAL (BOOLEAN) VARIABLES
+
+Many programming languages have logical or Boolean variables that can hold the value "true" or "false". 
+
+They are used to follow : 	toobig = xyz > maximum;
+
+Variables toobig now has a value of "true" and "false" and is used directly in a conditional statement 
+
+				if (toobig) xyz = 100;
+
+In C, only integer type variables can be logical variables. 
+
+	if it's value is non zero, it is considered to be "true".
+
+	if it's value is zero, it is considered to be "false".
+
+e.g 	x = 100 * y - 1234;
+	if (x) printf("answer is not zero");
+
+it is possible to assign conditional expression
+
+e.g 	int x;
+	x = getchar() == '\n' ;
+
+	x will be set to :	1 if the  expression is true 
+		end and 	0 if the expression is false
+
+
+
+	CONFUSION OF = AND ==
+
+consider : 	if (x = y) z++;
+
+the expression looks ok and it is a perfectly valid statement ... but it does not behave as expected 
+
+it actually does the following :
+
+1. 	the value of y is assigned to x 
+2.	if the assigned value happens to be zero, z is not incremented. for any other value, it will be.
+
+it does not matter whether x was equal to y or not 
+	it certainly will be afterwards, if it wasn't before.
+
+Note : this is perhaps the most common error in C.
+       if your programs seems to be doing something inexplicably wrong - always check for error first.
+
+
+	THE && AND || OPERATORS 
+
+These are used for combining logical conditions.
+
+They are used as follows :
+	if (condition1 && condition2) .....;
+
+	if (condition1 || condition2) .....;
+
+ && gives a result of true if both conditions are true. 
+
+ || gives a result of true if either or both conditions are true 
+
+e.g 	if (abc > xyz && fred == joe + 1) z++;
+
+	if (abc <= xyz || fred != joe + 1) z++;
+
+three or more conditions can be combined.
+
+e.g 	if (x == 2 || x == 4 || x == 6 || x == 8) x++;
+
+
+multiple condtions can also be asigned to a variable.
+
+e.g 	 int drinker ;
+	  drinker = age >= 18 && price <= 150;
+	if (drinker) printf ("mile is a pint")
+
+
+	COMMON ERRORS OF MULTIPLE CONDITIONS
+
+1.	consider : if (x == a || b || c ) ... ;
+
+	it reads OK and it is valid in C ... but this also does not behave as explained 
+
+	it will be true if either b or c is not zero.
+
+	because : b and c are considered as logical values only, neither is compared with x. 
+	a complete condition value of expression should exist on both sides of && or ||. 
+
+	In C, to get the correct answer, use : 
+		if (x == a || x==b || x==c )...;
+
+2.	consider : if (x < y < z) ...;
+
+	this type of expression is commonly used in mathematics and again it is valid in C ... but again it does not 
+	behave as expected 
+
+	it will always be true if z is 2 or more 
+
+	it is true because firstly x is compared with y given a 1 for true or a 0 for false.
+	and then the 0 or 1 is compared with z 
+
+	to get the correct comparison in C use :  if (x<y && y<z)...; 
+
+
+
+	CONFUSION OF && AND || WITH & AND | 
+
+The && and || for compiling logical expressions.
+
+The & and | are for the manipulation.
+
+These operators must not be confused.
+
+&& and || always give a result of 0 and or 1. This is not very useful for bit manipulation.
+
+The & and | operators will often work with conditions but they sometimes give the wrong answers 
+
+e.g if "toobig" has a value of 2 and "tooheavy" a value of 8, then both are non zero and are therefore 
+true.
+
+so "toobig" && "tooheavy" will always be "true" 
+
+but toobig & tooheavy will be zero i.e "false"
+
+it is advisable for all C programmers to get into the habit of using && and || for conditional expression.
+
+
+	EVALUATION OF MULTIPLE CONDITIONS 
+
+Where multiple conditions are combined with && or ||, C ensures that 
+
+1.	they are evaluated left to right.
+
+2.	C only evaluates what it needs.
+
+use of these facts can be made as in the following :
+
+	1.	if ((ch = getchar()) == 'y' || ch == 'Y') ...;
+
+		in the second condition ch has the value read by the getchar().
+
+	2.	if (num != 0 && total/num > 10)...;
+
+		if num is zero, the whole multiple condition cannot be true, therefore 
+		the second condition is not evaluated 
+		i.e division by zero is avoided 
+
+
+
+	THE ! OPERATOR 
+
+! is the "not" operator.
+
+used in logical expressions it reverse the true and false state.
+
+	e.g 	drinker = age >= 18;
+		if (!drinker) printf("squash please");
+
+if x has any non zero value, !x has a value of 0.
+
+if x is 0, !x has a value of 1.
+
+
+
+	THE ELSE STATEMENT
+
+The else statment is only used following an if statement.
+
+	e.g	if(a > b) max = a;
+		else max = b;
+
+if the if condition is true, the associated statement following the condition is executed,
+otherwise, if and else statement is present, the statement following the else is executed.
+
+it is not possible to have any other type of statement between the if and else.
+
+
+	GROUPING STATEMENTS WITH {}
+
+The {} can group statements so that they act as one for use with the if, else and other statements.
+
+e.g	 ch = getchar();
+	 if (ch >= '0' && ch <= '9') {
+		digits_count++;
+		printf("the character is a digit\n");
+	 }
+	 else {
+		other_count++;
+		printf("not a digit character\n");
+	 }
+
+The {} can contain further, "nested" if ... else statement:
+
+	if (ch == 'y' || ch = 'n') {
+		printf("answer is");
+		if (ch == 'y') {
+			printf("yes");
+			x++;
+		}
+		else {
+			printf("no");
+			x--;
+		}
+	}
+	else
+		printf("please answer 'y' or 'n'");
+
+if-else statement can be nest to any depth. (in actual program write as "else if").
+
+
+	LAY OUT OF {} BLOCK AND CODE 
+
+There are a number of convention used for laying out code in {} :
+
+1.	if (condtion) {
+		statements;
+		statements;
+	}
+
+2.	if (condition) 
+	{
+		statements;
+		statements;
+	}
+
+3.	if (condition)
+		{
+		statements;
+		statements;
+		}
+
+it does not matter which convention is adopted providing :
+
+.	a clear and consistent layout is adopted 
+
+.	the code between the {} is indented far enough to see the (at least 3 spaces).
+
+.	nested blocks further indents the code by the same amount.
+
+these simple rules make the code much easier to read, and "bugs" much easier to trace. 
+
+
+	IF (...) IF (...) STATEMENTS
+
+It is possible for an if to be the statement part of another if without using {};
+
+e.g 	if ( a == b) if ( cw == d) x++;
+	else x--;
+
+the layout of these statements are misleading. 
+
+in the above circumstance the else belongs to the last unpaired if.
+
+a further else could have paired the first if :
+
+	if (a == b) if (c == d) x++;
+	else x--;	/* belongs to second if */
+	else x = 0;     /* belongs to first if */
+
+this is obviously confusing. 
+
+In general it is bad practice to follow an if with another if. Always put a {in between for easier reading :
+
+	if (a == b) {
+		if (c == d) x++;
+		else x--;	/* belongs to the second if */
+	}
+	else x = 0; 		/* belongs to the first if */
+
+ 
+
+
+	if ... else if ... else construction 
+
+wherever possible it is better to use an if following an else rather than an if following an if.
+
+e.g 	if (ch >= 'A' && ch <= 'Z') {
+		printf("capital letter");
+	}
+	else if (ch >= 'a' && ch <= 'z') {
+		printf("lower case letter");
+	}
+	else if (ch >= '0' && ch <= '9') {
+		printf("digits");
+	}
+	else {
+		printf("other characters");
+	}
+
+.	one and only one set of {} will be executed.
+
+	.	starting from the top the executed {} will correspond to the first condition found to be true. 
+
+	.	all other {} will then be skipped regardless of whether conditions would be true or not. 
+
+	.	the final else is optional. the associated {} is only executed if no previous condition is true.
+
+	.	if no condition is true there is no final else, no {} is executed.
+
+	this is a common, easy to follow construction. 
+
+	it is the only time that an else is not normally indented the same amount as an associated if statement.
+
+
+	THE ?: OPERATOR PAIR (tenary operator)`
+
+The ? operator and the : operator are only used together. 
+
+They form an alternative to the if and else statement for assignments. 
+
+	e.g 			x = a > b ? a + 1 : 0;
+
+this is equivalent to : 	if (a > b) x = a + 1;
+				else x = 0;
+
+in general, a program is far easier to follow if the if and else statement are used, 
+the ?: operators are usually only used in macro-definitions.
+
+the ?: operators are best avoided whenever possible. 	 
+
+
+
+
+
+
+  
+

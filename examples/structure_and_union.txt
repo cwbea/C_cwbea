@@ -1,0 +1,394 @@
+			STRUCTURE AND UNION
+
+What is structure ?
+A structure (like a record in PASCAL) is a group of variables known by one collective name. Within the structure, the 
+individual variables (called members of fields) can be of different types. e.g a character array and an integer could
+be grouped together and known by one name.
+
+Structures are therefore useful for organising complex data
+
+
+	STRUCTURE TYPES DECLARATION
+
+A structure type declaration list the individual variables (members) that are to make up any structure of that type.
+
+It does not cause any storage to be allocated by the compiler.
+
+The letter will occur when variables are defined to be of the structure type (just as storage is allocated when variables 
+are defined to be of the int data type).
+
+The syntax of a structure type declaration is as follows
+
+	struct tag {
+		member declaration
+	};
+
+struct is a keyword used to start a structure declaration
+
+tag (which is optional) gives a name to structure data type.
+
+member declaration list the member that will make up the structure.
+
+e.g 	struct taxcode {
+		int number;
+		char letter;
+	}
+
+this declares a data structure with name "taxcode" consisiting of an integer named "number" and a character named "letter".
+
+Note that no actual structure has been declared by ths declaration, i.e no memory has been reserved, the declaration has merely
+defined a type of structure for future use.
+
+
+		
+	STRUCTURE DECLARATION
+
+A structure definition causes storage to be allocated for a variable of some structure type. 
+
+Structure can be declared in two ways :
+
+	either 		1	using a previously defined type
+			2	defining a type with the structure declaration
+		
+e.g 
+	either
+		struct taxcode {
+			int numbers;
+			char letters;
+		};
+
+struct taxcode my_taxcode, taxcode_2; /*declares structures of the taxcode type*/
+
+OR
+	struct personnel{
+		char name[20];
+		int age, birthday[3];
+	} my_record;	/*declares a structure with the number as specified*/
+
+note that, as in the above example, array can be member of structure.
+
+A declaration can define both a structure type and a variable of the same type
+
+e.g
+	struct taxcode {
+		int num;
+		char letter;
+	} taxcode_x, taxcode_y;
+
+this declares the structure type called taxcode and also declares the structure variable called texcode_x and taxcode_y.
+
+struct taxcode mytaxcode;
+
+this will declare a structure similar to taxcode_x to taxcode_y
+
+its possible to have arrays of structure.
+
+struct taxcode {
+	int number;
+	char letter;
+} employee_taxcode[100];
+
+memory will be reserved for 100 structures called employees_taxcode[0], each one will have an integer part
+called number and a character part called letter.
+
+the declaration : 
+	struct personnel friend[10];
+
+will reserve memory for 10 structures, friend[0], friend[1], etc each with the same members in any other structure of type personnel.
+
+
+
+	REFERENCING STRUCTURE MEMBERS
+
+Part of a structure variable can be accessed using :
+
+	structure_variable_name.member_name
+
+e.g 	my_taxcode.letter = 'H';
+	employees_taxcode[57].number = 108;
+
+The structure members can be used in exactly the same way as any other variables of the same type.
+
+if the structures also each contain an array, the parts of the array are used as follows :
+
+	year_born = friend[4].birthday[2];
+
+the index following friend indicates which structure is being referred to,
+the index after birthday indicates which array elements within the structure is being referred to.
+
+
+	REFERENCE WHOLE STRUCTURES
+Most modern C compilers (but not some older, pre-ANSI one's) allows whole structure to be assigned, one to another.
+
+e.g 	mine_taxcode = employees_taxcode[44];
+
+this would be equivalent to the two statements 
+
+	mine_taxcode.number = employee_taxcode[42].number;
+	mine_taxcode.letter = employee_taxcode[42].letter;
+
+simple asssignments is the only possible binary operator that can be used on whole structures.
+it is not possible to use other binary operators
+on whole structures so, for example it is not possible to test to see if two structures
+ are the same or different by comparing using == or !=
+
+	if (my_taxcode == employee_taxcode[99])	/*illegal*/
+
+similarly, with one exception it's not possible to see unary operators such as - or ++
+on whole structures even if the structure only contains
+the component. The exception in the address operator, &, is  described later in section 10 on pointers.
+
+
+	INITIALISATION OF STRUCTURES
+It is possible to give initial values to structures when they are declared,
+ providing the initial values are given in a list {} after the structure
+variable name, not at the point where each member is defined.  
+
+e.g struct taxcode {
+	int number;
+	char letter;
+    } my_taxcode = {1234, 'A'};
+
+    struct taxcode employee_taxcode[3] = {2345, 'B', 3456, 'C, 4567, 'D'};
+
+note that the initialisation of a structure variable is much the same as array initialisation explained earlier
+
+
+	STRUCTURE BIT FIELD
+
+It is possible to packs several data items into a computer word using structure bits fields
+
+this can be useful when :
+1. storage space is as a premium and whole words are not essential.
+2. particular bits of a word need to be accessed such as when interfacing to hardware devices.
+
+A structure bit field is a set of adjacent bits within a single int [bit cannot overlap a word boundary] defined by a field within (in bits)
+after a name in a structure declaration.
+
+e.g 	struct {
+		unsigned lowest_bit :   1;
+		signed next3bits :	2;
+		unsigned next2bits :	3;
+	} bitset;
+
+within the structure variable "bitset", "lowest_bit" would occupy bit 0, "next3bits" bits 1 to 3 and so on.
+All these structure bitfields  will be taken to be unsigned quantities.
+
+Bitfields do not have to be named (and unamed field can be used to "pad out" a structure). In addition, fields can be aligned on words boundaries
+by preceeding them with a named or unnamed field or zero field width. A zero field width tells the compiler to allocate the remainder of the word
+to the field.
+
+e.g 	struct {
+		unsigned word0bit0 : 1;
+		unsigned 	   : 0;
+		unsigned word1bit0 : 1;
+	} bitset;
+
+note that difference implementation may assign fields either from right to left or vice-versa within a machine word.
+
+
+
+	USING STRUCTURE BIT FIELD
+Structure bitfield can be used as any other integer type variable.
+
+if a bitfield value is assigned to a char or int variable or any structure bitfield with more bits, the extra bits at the left hand end of the word
+are filled with  zeros if the bits field is unsigned or either zeros or ones if the bitfield is signed.
+
+if a char or int variable or a wider struct bitfield is assigned to a bitfield the right most bits are copied. Those bits on the left that cannot fit
+are lost 
+
+These allows, for example, integer to be used as temporary variables when manipulating bits.
+
+e.g 	struct {
+		unsigned word0bit0 : 1;
+		unsigned	   : 0;
+		unsigned word1bit0 : 1;
+	}  bitset;
+
+
+	int temp;
+
+	temp = spacebitset.word0bit0;	/*leftmost bit of temp padded with the zeros*/
+
+	bitset.word1bit0 = temp;	/*only the rightmost bit of temp is copied*/
+
+
+
+			
+
+			UNION	
+A union is a named piece of  storage that contains one of a number of different data types all of which overlay each other in memory (similar to
+the variant field of a variant record in PASCAL).
+
+The C syntax for union declaration and used is similar to that for a structure except that initialisation if allowed is different and bitfields do
+not exist. The difference between structures and the union is the way in which the memory is organised.
+
+
+	UNION DECLARATION
+The syntax of a union declaration or definition is identical to that for a structure, except that the keyword union replaces struct.
+
+i.e 
+	union tag {
+		declaration_list
+	} variable_name(s);
+
+where :
+	tag is optional and given a name for the type of union to allow later declaration of union without the need to specify all the members again.
+
+	variable_name gives the name of actual union in memory, if none are given the declaration defines a data type only.
+
+	declaration_list lists the alternative data items that could be stored in the union data type.
+
+e.g 	union unumtype {
+		float fnum;
+		int inum;
+	} unumber, uarray[10];
+
+	which is equivalent to the separate declaration of type and variables :
+	
+	union unumtype {
+		float fnum;
+		int inum;
+	};
+
+	union unumtype unumber, uarray[10];
+
+The compiler will always allocate sufficient storage for the largest type in the declaration list.
+for example
+
+	unumber will be allocated enough storage for one float point number.
+	uarray will be allocated enough storage for ten floating point number.
+
+Referencing part of a union is similar to referencing part of a struct.
+
+e.g 
+	unumber.fnum = 4.321;
+	value = uarray[6].inum;
+
+The difference is that changing the value in unumber.fnum will also change the value of unumber.inum as it occupies the same 
+position in memory.
+
+
+
+	REFERENCING WHOLE UNIONS
+
+Unions, like structures, can be referenced as a whole for simple assignments on most modern C compiler.
+
+e.g 	unumber = uarray[4];
+
+other operators, with the exception of the address operator cannot be used on whole unions.
+
+
+
+	WHY USE A UNION? 
+
+A union may be used if memory space is in short supply. This may be true if there are large data arrays.
+If two of these data arrays are not used at the same time they could be allocated to the same memory space using a union.
+
+e.g 
+	union {
+		int numbers[5000];
+		char letters[10000];
+	} u;
+
+in this example, if an integer takes two byte, 10000 bytes are reserved in memory for the array u.numbers  but the same 
+memory is also usable as the character array u.letters. These arrays would have to be used at different times, however,
+or used if one would corrupt the other.
+
+A union may also be used if it's desirable to use same memory in two different ways. To do this it is usually neccessary
+to nest a structure within the union.
+
+
+	NESTING STRUCTURES AND UNIONS
+
+structures and unions can be nested within each other to build more complex data types. 
+
+e.g 
+	union {
+		int param_array[8];
+		struct {
+			int num_employees, num_debt, num_manager;
+			int min_salary, max_salary;
+			int dates[3];
+		} parameter;
+	} system;
+
+The above example may be used for a program on personnel records. The program would have certain system parameters
+values such as the number of employees stored in a variable called system.parameter.num_employees and the companies
+minimum salary stored in a variable called system_parameter.min_salary, etc.  these system values are all stored together
+in one array called system.param_array. The same memory could be accessed in either way, whichever is most convinient
+
+e.g 
+	if (salaray < system_parameter.min_salary) salary = 500;
+
+	for (i=0; i<8; i++)
+		printf("%d", system.param_array[i]);
+	
+An example of nesting architecture and union might occur for some software that deals directly with a hardware device.
+Such devices frequently have "status word" which can be read to indicate the current state of the device. Some or all of 
+the bits in the status word have separate meaning for each bit such as "busy" bits and a "done" bits. This situation can
+be usefully handled by a union containing a structure with bitfields
+
+e.g 
+	union {
+		int word;
+		struct {
+			unsigned busy : 1;
+			unsigned done : 1;
+			unsigned clear : 1;
+			unsigned interrupt : 1;
+		} bits;
+	} status;
+
+The whole word can now be handled be using status.word, and individual bit can be handled using status.bits.busy, etc.
+e.g 
+	status.word = getstatus();	/*functions read status*/
+	if (status.word == 0) .....;	/*all bits cleared*/
+
+ or indiviual bits may be accessed by name to make the program easier to follow :
+
+	if (status.bit.busy ==1) ....;  /*this is device busy*/
+
+
+	INITIALISING UNION
+
+Most recent compilers will allow union to be initialised, but it is only the firstmember of the union that can be initialised.
+e.g
+
+	union {
+		int word;
+		struct {
+			unsigned busy : 1;
+			unsigned done : 1;
+			unsigned clear : 1;
+			unsigned interrupt : 1;
+		} bits;
+	} status = 014;		/*intialises status.word so that only the clear
+				and interrupt bits are set, the rest are zeroed */
+
+
+
+	SIZEOF 
+
+The size of a structure may sometimes not be the sum of the sizes of the members as on some computers, it may be neccesay to 
+align certain types of data of even addresses. These may mean there are unused spaces inside the structure.
+
+C provides an unary operator sizeof, which will yield the size (in units, the size of characters i.e bytes) of any data type of
+variables. It is used a bit like a function except that the parameter maybe either a variable or a data type.
+
+e.g
+	number = sizeof (int);
+	number = sizeof (struct taxcode);
+	number = sizeof (my_taxcode);
+	number = sizeof (status);
+	
+when a union type is used as a sizeof parameter, the size of the length of the largest member is returned.
+					 
+ 
+	 
+
+
+
+
+
+

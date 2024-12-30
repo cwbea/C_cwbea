@@ -1,0 +1,54 @@
+				ANSWERS 2
+
+1. Bill = Ada; is legal because Ada will have a garbage number which will be stored in Bill.
+
+2. Ada = 0xAda; is legal; because hexadecimal is an integer not a character.
+
+3. Bill = letter; is illegal because they are not of the same data type 
+
+4. Ada = digit; is illegal because they are not of the same data type 
+
+5. Bill = cwbea; is legal, because it is an  int to int assignment, however
+		 since cwbea is uninitialised running the programme could lead
+		 to unpredictable results.
+
+6. digit = 66; is illegal because digit is a char and every char is supposed to be ina  single quote.
+
+7. digit = '\102'; is legal, note \'102' is a character because it is in single quote,
+            it is also valid because local or global variables can be re-initialised
+		at any point in the programme.   
+
+8. digit = 0102; is illegal, because digit is of type char while octal is of 
+		of type int.
+
+9. letter = '\9'; is legal, becuase letter is of type char which the value must be 
+		in a single quote and also local variables can always be re-initialised.
+
+
+10. letter = "A"; is illegal, because letter is of type char which is meant to hold
+		a single character i.e 'A'. "A" represents a  string literal and not a single 
+		character.
+
+11. letter = cw; is legal, both letter and cw are of type char since cw = 'A', the 
+	        assignment will set letter to 'A'.
+
+12. Xvalue = 12.345; is legal, since Xvalue is a float, floating point values 
+		   can be reinitialised at any point in the programme.
+
+13. Xvalue = 1234.5e- 2; is legal,but the e needs to be close to 5 i.e 
+			Xvalue = 1234.5e-2 
+
+14. yvalue = Xvalue; is legal because they are of both same data type.
+
+15. val = 0177777U; is legal, it represents an octal( base-8) literal.
+		the U- suffix qualifies the number as unsigned. To print
+		unsigned value use %U or %u.
+
+16. cw = 100; is illegal,  The 100 is an int number 
+                           and cw is a char type which must be in single quote.
+
+17. cw = 'A'; is legal, because they are of the same data type.
+		   
+		    
+
+ 

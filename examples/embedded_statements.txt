@@ -1,0 +1,136 @@
+			EMBEDDED STATEMENTS
+
+In C every assignment statement has a value. 
+
+The value is that which is assigned ...and itself can  be used in an expression 
+
+e.g : 		abc = 10 + (num = 2) * 3;
+		
+This statement performs two assignments :
+	1.	The value 2 is assigned to num. 
+	2.	The value 16 is assigned to abc.
+
+Any assignment can be used this way : 
+
+e.g : 	abc += (xyz *= 3);
+
+If abc starts with the initial value of 100 and xyz with a value of 10 then :
+	30 is assigned to xyz
+   and  
+	130 is assigned to abc. 
+
+	
+	USING EMBEDDED STATEMENTS
+
+1.	() are normally neccessary around any embedded assignment ... otherwise
+	the compiler can misinterpret the meaning of the expression.
+
+2.	() also make the statement easier for the programmers to understand 
+
+3.	If no () are used, assignment operators from right to left 
+	i.e	x += y = joe *= abc ;
+	is equivalent to x += (y = (joe *= abc));
+
+
+	with simple assignments using = this does give a relative intuitive meaning :
+		e.g	abc = def = xyz = 2;
+		will set all of the variables abc, def, xyz to 2.
+
+4.	Although embedded statements are a powerful feature they should be used with care as
+	they can result in program that are  :
+		1	Difficult to read 
+		2	Difficult to follow
+		3	Difficult and lostly to maintain
+
+
+	EMBEDDED ++ AND -- OPERATORS
+
+If the "auto-increment" operator and "auto-decrement" operator, ++ AND -- are used in an
+expression, meaning depends on whether they come before or after the variable.
+
+If xyz has an initial value of 2 then in the following  :
+	(a)	abc = 4 * ++xyz;
+	(b)	abc = 4 * xyz++;
+
+	... Both statements will add 1  to xyz to make 3 
+	
+	... but (a) will increase xyz before it is used in the calculation, 
+	    given a value of 12 in abc 
+
+	... whereas (b) will increase xyz after it is used in the calculation.
+	    given a value of 8 in abc.
+
+	    In (a) ++ is a pre-increment operator, in (b) it is a post-increment operator.
+
+	    similarly, -- can be either pre-decrement or post-decrement operator
+
+
+	    Note : ++ AND -- are used like any other unary operator and have the same 
+	    precedence. 
+
+	    this means that () are not normally required around a ++ or -- 
+	  	...but the use of spaces is often required to make a program readable 
+		e.g	a = b++ + ++c;
+
+Exercise 
+Given the following data declaration statements :
+
+	int Anne, Bob = 2, Chris = 3;
+	char Dave = 'A';
+	float Emma = 257.8;
+	long Fran = 0xffffe;
+	unsigned Gill = 0177777;
+
+assuming integers are stored in 16 bits and long integer in 32 bits.
+what is the value in each variable after each of the following statements
+
+	Anne = Bob * 2 + Chris / Chris;
+	Anne = 10 / Bob + Chris;
+	Anne = 12 / Bob * Chris;
+	Anne = Chris / 4;
+	Anne = Chris % 4;
+	Anne = Chris % 4 - Chris;
+	Anne = Bob << 2;
+	Anne = Bob >> 2;
+	Anne = Bob << 2 + Chris;
+	Anne = 1 << 15 >> 15;
+	Dave = 1 << 7 >> 7;
+	Anne = Chris  & 1;
+	Anne = Chris | 1; 
+	Anne = Chris ^ 1;
+	Anne = ~Bob;
+	Anne = ~Bob & Chris;
+	Anne = (( -1 ^ Bob) & 7) | Bob;
+	Anne = Fran;
+	Anne = Bob * Fran;
+	Anne = Chris & Fran;
+	Dave = Fran;
+	Gill = Fran;
+	Gill = -1;
+	Fran = Gill;
+	Anne = Emma;
+	Dave = Emma;
+	Fran = ~Bob;
+	Dave = ~Bob;
+	Emma = 4 / Chris;
+	Emma = 4.0 / Chris;
+	Emma = 4 / (float) Chris;
+	Fran = (int) Gill;
+	Anne = Bob++;
+	Anne = Chris;
+	Bob = (Chris = 3) - 1;
+	Bob += Chris;
+	Bob |= ~Bob;
+	Anne ^= ~Anne;
+	Bob = 2 * ++Gill + 2; /* all the values are executed in octal, then final
+				result is converted to the decimal equivalent */ 
+	Bob %= Chris <<= 2; /* Bob = Bob % Chris = Chris << 2; */
+	Bob += Anne &= ~Anne; /*Bob = Bob + Anne = Anne &  ~Anne */
+	Anne = Chris = Dave = Emma = Fran = 3;
+	Anne = Bob++ + ++Chris;
+	Anne = (Gill = 1) << 15 >> 15;
+   
+
+  	
+
+

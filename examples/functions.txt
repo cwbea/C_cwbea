@@ -1,0 +1,831 @@
+		INTRODUCTION TO FUNCTIONS
+
+	WHAT IS A FUNCTION?
+
+A  function is a section of code that is separated from the rest of the program and given a name.
+This function is then "called" by name elsewhere in the program, either in the main program or from
+another function.
+
+Each time the function is called, the program jumps to the start of the function and begin executing
+instructions in the function. When the function is finished it jumps back to the instruction after the 
+original function "call", and continues where it had previously left off.
+
+The function is in effect a mini program in itself, and it is sometimes called a sub program. The equivalent
+in other programming languages may be referred to as "procedures", "sub-routines", or just "routines".
+
+
+Many languages distinguish between fucntion that return a value and those that do not. 
+
+e.g PASCAL has "procedures" and "functions"
+    FORTRAN has "subroutines" and "fucntions"
+
+    ... but in "C" all types of routines are called "functions".
+
+
+	WHY USE  A FUNCTION?
+
+Functions are useful for :
+
+1. commonly used sections of code that would otherwise have to be repeated at various points throughout the 
+   program.
+
+2. seperating our logical distinct sections of code that each have a single, self contained purpose. This makes 
+   a program easier to modify and maintain. 
+
+3. preventing any one part of the code getting too big. Smaller sections of code are easier to debug and 
+   maintain.
+   i.e it helps to "modularise" the code.
+
+
+	FUNCTION CALL, DEFINITION AND DECLARATION
+A  function call is where the function is used in the main program or in other functions.
+
+e.g 	z = average(x, y); //the lack of space qualifies it to be a function
+
+A function definition is where the internal statement that makes up a function are given.
+
+e.g	float average(int x, int y) {
+		returns (x + y);
+	} 
+
+A  function declaration is where the function returns value type and the parameter types are 
+specified. 
+
+Ths can be given in :
+
+1. the first line of the function definition.
+
+2. a separate declaration at the start of the source file known as the prototype.
+   which gives the return type and parameter types of the function but no details of the statement
+   of the function that makes up the function body. 
+
+  e.g 	float average(int x, int y);
+
+This function declaration can be mixed with variable declarations : 
+
+  e.g  float x, average(int x, int y), y[10];
+
+There may be more than one declaration for the same function providing all the return types agree.
+
+
+	A SIMPLE FUNCTION EXAMPLE
+
+#include <stdio.h>
+
+void hello(void);
+
+int main() {
+	int x;
+
+	x = 2;
+
+	hello();
+
+	printf("\n x = %d\n", x);
+
+	hello();
+
+	printf("\n end of program.\n");
+
+	return 0;
+}
+
+void hello(void) {
+	int i;
+	for (i = 0; i < 3; i++)
+		printf("hello");
+}
+
+
+This programmes will give the following output :
+
+	hello hello hello
+	x = 2
+	hello hello hello
+	End of program
+
+
+
+	NOTES ON USING FUNCTIONS
+
+1. The name of a function is always followed by ().
+   There may or may not be something enclosed between the brackets ().
+
+2. The first, one line reference to the function hello, is the function's prototype.
+   It declares the function. This means it tells the compiler what parameters and return type
+   it has, so the compiler knows how to use it in sub-sequent calls to the function.
+
+3. The keyword "void" is used in the example to show  the function has no return value and no 
+   parameters.
+
+4. The reference to hello after main is the function definition which has the function body between 
+   {} to define what the function does.
+
+5. There can be more than one prototype for a function but they must all give identical parameters and 
+   return types. Similarly, the function definition must also match any prototype. The function definition,
+   in fact also counts as a prototype itself.
+
+6. The function "hello" could have been defined either before or after main, in the example there would be no 
+   difference.
+
+7. Each functions must be separate --> it is not possible to define one function inside another as in languages
+   such as PASCAL.
+
+8. The main program is also a function. It could in theory be called like any other function(but it would make 
+   little sense to do so ).
+
+9. The function always start at the beginning of main, regardless of whether it is the first function defined or not.
+
+
+
+
+	LOCAL VARIABLES 
+
+The following code is incorrect :
+
+#include <stdio.h>
+
+void hello(void);
+
+int main() {
+	int x;
+	x = 2;
+
+	hello();
+
+	printf("\n x = %d\n", x);
+
+	hello();
+
+	printf("\n end of program");
+
+	return 0;
+}
+
+void hello(void) {
+
+	int i;
+
+	for (i = 0; i < x; i++) 	// error
+		printf("hello");
+
+	x = 4;				// error
+}
+
+The two lines marked with an error comment will cause the compiler to give a syntax error of "undefined variables"
+for the variable x.
+
+This is because x is decalred inside main therefore, it is local to main.
+
+i.e It cannot be used anywhere except inside main.
+
+Similarly, the variable i is local to function hello, so it would have caused an error if an attempt had been made to use 
+it inside main.
+
+
+
+	GLOBAL VARIABLES 
+
+The follwoing code is correct :
+
+#include <stdio.h>
+
+void hello(void);
+
+int x;
+
+int main() {
+	x = 2;
+	
+	hello();
+
+	printf("\n x = %d\n", x);
+
+	hello();
+
+	printf("\n end of program\n");
+}
+
+void hello(void) {
+	int i;
+
+	for (i = 0; i < x; i++)   // code is correct
+		printf("hello");
+
+	x = 4;			  // code is correct
+}
+
+
+This will give the following output :
+
+	hello hello
+	x = 2
+	hello hello hello hello
+	end of program
+
+x is now declared before the start of main, outside and before any function, therefore x is a global variable.
+
+i.e it can be used in main or any other function provided it is not also declared within the function as a local 
+variable. 
+
+
+
+
+	LOCAL VARIABLE IN DIFFERENT FUNCTIONS
+
+The following code is valid in C but it will not work as expected :
+
+#include <stdio.h>
+
+void hello(void);
+
+int main() {
+	int x;
+	x = 2;
+
+	hello();
+
+	printf("\n x = %d\n", x);
+
+	hello();
+
+	printf("\n end of program\n");
+
+}
+
+void hello(void) {
+	int x;			// x is also local for hello
+	int i;
+
+	for (i = 0; i < x; i++)  // deceptive
+		printf("hello");
+
+	x = 4;			// deceptive
+}
+     
+
+the same x is declared in both main and hello.
+
+This means the use of x is valid to each function ... but these are two different variables.
+
+i.e x in main is not the same as x in hello. 
+
+the program will run but there is no telling how many times the world hello will be printed. 
+it would depend on whatever seemingly random value the function hello has stored in it's variable x,
+and it will probably be a different value for each call of the function hello. 
+
+
+
+	GLOBAL AND LOCAL VARIABLES OF THE SAME NAME 
+
+The following code will not cause any compilation error but it will not work as expected :
+
+#include <stdio.h>
+
+void hello(void);
+
+int x; // it is a global variable
+
+int main() {
+	int x; 		// it is also local to main
+	x = 2;
+
+	hello();
+	
+	printf("\n x = %d\n", x);
+
+	hello();
+
+	printf("\n end of program\n");
+
+	return 0;
+
+}
+
+void hello(void) {
+	int i;
+	
+	for (i = 0; i < x; i++)  // deceptive
+		printf("hello");
+
+	x = 4;			// code correct
+
+}
+
+
+This will give the following output :
+
+	<blank line>
+	 x = 2
+	hello hello hello hello
+	end of program
+
+Again, there are two variables called x. 
+main uses it's local x in preference to the global x.
+hello has no choice but to use global x.
+
+Global variables have default starting value of zero (hence the blank line in the output).
+local variables do not default to initial value of zero, but has seemingly random initial value.
+
+
+
+	FUNCTION PARAMETERS
+
+ Function parameteres may be referred to  as function arguments. They provide a means of passing data
+to a function. 
+
+e.g 
+
+#include <stdio.h>
+
+void hello(int num);
+
+int main() {
+	int x;
+	
+	hello(4);
+
+	x = 2;
+
+	printf("\n x = %d\n", x);
+
+	hello(x+1);
+
+	printf("\n end of program\n")
+
+	return 0;
+}
+
+void hello(int num) {
+	int i;
+
+	for (i = 0; i < num; i++)
+		printf("hello");
+
+}
+
+these would give the following output :
+
+	hello hello hello hello 
+	x = 2
+	hello hello hello 
+	end of program
+
+
+
+
+	NOTE ON FUNCTION PARAMETERS 
+
+1. The parameters are given between the () following the function name.
+
+2. There can be any number of parameters separated by commas.
+
+3. In the function definition, the parameters are names of special local variables.
+
+4. The type of each parameter variable must be declared between the () at the start of the 
+   function. Other local variables are declared after the {in the usual way}.
+
+5. In the function call, the parameters are the values to be copied into the function's 
+   parameter variables. each time the function is called the parameter's variables are 
+   initialised by whatever values are given in the function's call. 
+
+6. It is possible for the variable parameters to have the same name as a variable used in 
+   the calling code. 
+   e.g in the example, num could have been called x. 
+       in this case, the parameter x is in hello and the value x is in the main program, 
+       would have been two different variables.
+
+single variables (integer, character, etc) and whole structure can be parameter variables.
+
+An array can also be a parameter variable but it has some apparently different properties.
+the reason for this will become clear in the section on pointers used with functions
+
+
+
+	FUNCTION PARAMETER LIMITATION 
+
+ As the parameter variables has a copy of the value given in the call, any change made to the parameter variable cannot
+change any variable in the calling code
+
+e.g supposed the function helo had an extra line as follows :
+
+hello(int num) {
+	int i;
+	for (i = 0; i < num; i++)
+		printf("hello");
+	num = 100;	//extra line
+}
+
+And the main program had the lines :
+
+	x = 2;
+	hello(x);
+	printf("%d", x);
+	
+then the ouput would be :
+	hello hello 2
+
+i.e, the change to num inside hello cannot affect the original value in x within the main program.
+
+
+
+
+	NOTES ON THE FUNCTION PROTOTYPE
+
+1. The function prototype given at the start of the program source file, before the definition of main or 
+   any other function, also specifies the parameter name and type. The prototype informs the compiler what
+   number and types of parameter the function has for when it used in main or elsewhere. The prototype must
+   correspond exactly  with the actual definition of the function or a compiler error will occur.
+
+2. A prototype does not need to specify the name of parameters. 
+
+	e.g 	void hello(int);
+
+   however, the use of name often gives an indication of it's purpose so the name can improve the program
+   readability, and in such case it is recommended that the name is given.
+
+3. There may be more than one prototype for the same function but each must correspond exactly with the first
+   in terms of the numbers and types of parameters and return type of an error will occur. If parameter names
+   are given these too must correspond with other prototypes where the names are given and with the program 
+   definition.
+
+4. It is not essential that a prototype is specified for a function, if the function is defined before it is 
+   called (i.e in the example if the function hello was defined before the main program). In this case the function
+   definition becomes it's own prototype.
+
+5. If there is no prototype for a function and it is called before any function definition, then a default 
+   prototype is assumed with the function return type (described later) it is assumed to be integer and the
+   parameter type are assumed to be of whatever type is given in the function call. If letter calls have
+   different numbers of parameters or different parameter types or if the letter function definition does
+   not correspond to the assumed prototype then an error will be generated.
+
+   In general, it is recommended that a prototype is given for every function used.
+
+6. A prototype may  be given without any parameters specified as in :
+
+	void hello();
+   
+   in this case, the compiler will make no checks on the parameters when the function is called. It could be 
+   called with different number of parameters or different types of parameters without the compiler generating
+   an error. However, the function is unlikely to be able to cope with these different types and unpredictable
+   runtime error are likely to occur.
+
+   Programmers to ensure the right parameters are used in a function call for a function with this type of prototype.
+
+   The no parameter prototype  syntax is really a leftover feature of early versions of C, it's use is not recommended.
+
+7. To specify a function prototype with full compiler checking for a function with no parameters, the keyword Void should
+   be used between () as shown earier in this section in the form :
+	
+	void hello(void);
+
+8. The prototype for getchar, putchar, printf and other inputs and output functions are declared inside the include file
+   "stdio.h".
+
+
+	
+	THE USE OF THE ECLIPSE 
+
+Sometimes, a function is defined where some of the parameters can vary in number and type. Printf is just such a function, 
+where the only fixed parameter type is the first parameter. In such cases, the eclipse can be used to specify to the compiler
+that the function will handle whatever parameters are given as in :
+
+	int printf(char *format string,...).
+
+this tells the compiler that the first parameter is a pointer (this is indicated by the * syntax which is explained later).
+after this parameter the ... indicates that there could be any number of parameters of varying types that could follow.
+
+These can be any number of conventional parameters declared before the eclipse as long as this is at least one, there can be no 
+further parameters follwoing the eclipse.
+
+
+	FUNCTION RETURN VALUES
+
+A function can have a value. The value is assigned to the function using a return statement as in :
+
+//function to read an integer from the keyboard
+
+int getint(void) {
+	int ch, num = 0;
+	while ((ch = getchar()) >= '0' && ch <= '9')
+		num = num * 10 + (ch - '0');
+	
+	return num;
+}
+
+This function value can then be used in any assignment or expression as in :
+
+#include <stdio.h>
+
+int getint(void);
+
+void main(void) {
+	int x;
+	printf("please input a number : ");
+
+	x = getint();
+	printf("and another : ");
+	printf("\n sum is %d\n", x + getint());
+}
+
+int getint(void) {
+	int ch, num = 0;
+	while ((ch = getchar()) >= '0' && ch <= '9')
+		num = num * 10 + (ch - '0');
+	
+	return num;
+}
+
+this program will :
+1. prompt the user to enter a number.
+
+2. read the number entered by the user, terminate with any non numeric character.
+
+3. ask the user for another number.
+
+4. read the number entered by the user.
+
+5. print out the sum of the two numbers.
+
+
+
+	FUNCTION RETURN TYPES
+
+ The int before the function definition of getint and differences would be omitted as the default function
+type is int, however it improves the program readability to specify the return type explicitly.
+
+A function returns a type other than int, the type must be declared in the function definition.
+
+e.g 	float average(int x, int y) {
+		return (x + y)/2.0;
+	}
+
+A function type can be :
+1. Any single value type (int, char etc).
+
+2. A whole structure
+
+3. Type "void" which means nothing is returned
+
+
+
+	DECLARING FUNCTION RETURN TYPES
+
+ The function type must be declared before the function call if it is any type other than int.
+
+This must be done by either :
+1. Putting the function definition before main and other functions where it may be called :
+
+
+	#include <stdio.h>
+
+	float average(int x, int y) {
+		return (x + y)/2.0;
+	}
+
+	void main() {
+		int x = 2, y = 3, z;
+		z = average(x, y);
+		printf("avg is %8.3f\n", z);
+	}
+
+or 
+
+2. Putting a function declaration at the start of the program source file in a prototype :
+
+	#include <stdio.h>
+
+	float average(int x, int y);
+
+	void main() {
+		int x = 2, y = 3, z;
+		z = average(x, y);
+		printf("avg is %8.3f\n", z);
+	}
+
+	float average(int x, int y) {
+		return (x + y)/2.0;
+	}
+
+
+
+	THE RETURN STATEMENT
+
+The return statement gets the value of the function when it is used in an expression. 
+
+e.g 	y = 2 * square(x);
+
+somewhere inside the function square, there should be a statement of the form :
+
+	return expression;
+
+where expression gives the value of the function as in :
+
+	float square(float z) {
+		return (z + z);
+	}
+
+if the function has a return statement without a value
+
+e.g 	return;
+
+or it comes to the final } of the function then no error is generated but an unpredictable value is returned.
+
+The expression in the return statement must be of the type of the function or convertible to the function type,
+so it would be acceptible, for example, to return a float or integer type but it would be an error to try and
+return a structure type in the square function defined above.
+
+If the function is defined without void, then an error is caused if any attempt is made to :
+1. return a value in return statement in the function definition.
+2. use a return value in the function call.
+
+	e.g 	void my_void_function(int z);
+		.....
+		y = my_void_function(x);	// error
+
+
+
+
+	FURTHER NOTES ON FUNCTION RETURN VALUE
+
+1. It is not neccessary to always use a function's return value.	
+
+	e.g	average(x, y);
+
+   this is valid thought not very useful statement!
+
+2. If a return value is used where none has been supplied by the function an unpredictable value is given.
+
+	e.g	x = hello(3);	//x is given an unpredictable value
+
+   if, however, the function has been specified as type void, then the above statement will give an error.
+
+3. If a return is given in main, the program exits.
+
+4. Strictly speaking, main should be declared as type void if no return value is given and with a void parameter
+   list, if null is used.
+
+	e.g 	void main(void) {
+			... etc
+   (on some computer system, a return value on main can be used to pass a signal to the operating system.)
+
+5. Although it is not neccessary to declare all functions with an int return type, it is good practice to do so for 
+   program clarity.
+
+
+
+	STRUCTURES AS FUNCTION PARAMETERS 
+
+Structures can be passed to a function as a whole, or individual structure parts can be passed.
+
+e.g 	#include <stdio.h>
+	
+	struct person_type {
+		char name[5];
+		int age;
+	} fred = {"fred", 50};
+
+	void output_person_details(struct person_type body);
+	int diff(int a, int b);
+
+	void main(void) {
+		output_person_details(fred);
+		printf("retiring in %d years", diff(fred.age, 65));
+	}
+
+	void output_person_details(struct person_type body) {
+		printf("\n%s is %d years old", body.name, body.age);
+	}
+
+	int diff(int a, int b) {
+		if (a > b) return a - b;
+		else return b - a;
+	}
+
+
+
+
+	STRUCTURE RETURN VALUES
+
+ A function can return a whole structure or it can return single values that can be assigned to some part 
+of a structure :
+
+e.g	#include <stdio.h>
+
+	struct TimeOfDay {
+		int hr, min;
+		char am_pm;
+	};
+
+	struct HalfDayLater(struct TimeOfDay now) {
+		if (now.am_pm == 'a') return 'p';
+		return 'a';
+	}
+	
+	struct TimeOfDay GetStartOfDay(void) {
+		static struct TimeOfDay temp = {9, 0, 'a'};
+		return temp;
+	}
+
+	void main(void) {
+		struct TimeOfDay appointment, NextAppointment;
+		appointment = GetStartOfDay();
+		NextAppointment = appointment;
+		NextAppointment.am_pm = HalfDayLater(appointment);
+	}
+
+
+
+	ARRAY USED WITH FUNCTIONS
+
+ An array element is equivalent to a single variable so it can be :
+
+1. Passed to a function as a parameter. e.g 	y = average(arr[3], arr[5]);
+
+2. Return as a function return value. e.g	return arr[2];
+
+3. Assigned a function return value. e,g 	arr[4] = average(a, b);
+
+4. Whole array can also be passed to a function, but it is not possible to have an array
+   as a return value
+   i.e  int arr[10];
+	return arr	//error
+
+Example of the valid use of an array with functions are as follows :
+
+	#include <stdio.h>
+
+	int num[8] = {12, 56, 89, 75, 32, 1, 22, 100};
+	int square[int x], biggest(int num[8]);
+
+	int main() {
+		int arr[2];
+
+		arr[0] = biggest[num];
+		arr[1] = square(arr[0]);
+
+	printf("%d %d\n", arr[0], arr[1]);
+
+	int biggest(int num[8]) {
+		int i, index = 0;
+	
+	for (i = 0; i < 8; i++) 
+		if (num[i] > num[index]) index = i;
+	return nums[index];
+	}
+
+	int square(int x) {
+		return x * x;
+	}
+
+
+
+
+
+	UNUSUAL PROPERTIES OF ARRAY PARAMETERS
+
+ Changes to an array parameters variable of a function will cause changes to the original array in 
+the calling code :
+
+	#include <stdio.h>
+
+	void ChangeName(char string[]);
+	char name[6] = "berry";
+
+	int main() {
+		ChangeName(name[]);
+		printf("name is %s\n", name);
+	}
+
+	void ChangeName(char string[]) {
+		string[0] = 'h';
+	}
+
+
+This will output :
+
+		name is harry
+
+this means that for an array parameter, the new local variable does not appear to be created.
+instead, in effect, a new name is given for the original array.
+
+i.e 	string and name are the same array
+
+this is not true of any other parameter type. (it is only true for arrays because of their association with pointers
+which is explained later.)
+
+Note that as no new memory is being reserved for the function parameter, the array size is the function definition
+is irrelevant. This means any array size value would do, or even, the array size can be left out all together as in
+the string parameter of ChangeName given above.
+
+The flexibility that allows the dimensioning of an array does not apply to arrays of two or more dimensions! The compiler
+needs to know, for example how long each role is in a two dimensional array in order to know where each element can be found.
+It does not need to know how many rows there are. However this means that the first dimension can be omitted but subsequent
+array dimensions must be specified.
+
+e.g 	void MyFunction(int array_3D[][10][20]) {
+		...
+	}
+
+
+		

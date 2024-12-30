@@ -1,0 +1,19 @@
+			ANSWERS 1
+
+
+1 a. cleo = 4.3 is wrong because it should be declared using float keyword instead
+  b. Doris ='D' is wrong because D should be declared using char instead 
+
+2 a. Eric = 257 is wrong because 'char' keyword is not used to declare numbers/ integers
+
+3 a. default is worng because it  is a reserved keyword, so it cannot be used as an identifier. 
+
+4 a. int is a data type and  only stores 32 bits of value so it is wrong it is only correct if used as in 'longint' which stores 64  bits of value, and fred = 123456789 is correct because the integer range falls in  a long data type value.
+
+5  y=100 e-6 is wrong, double should be used instead
+6  negative = -1 is illegal because it is actually signed due to the (-) symbol
+7  max is wrong becase const variables MUST be initialised to be used.
+8  George = 1.234; is correct because there is no sign preceeding it and it is in decimal 
+   making it qualify as a float type  value.
+  
+
