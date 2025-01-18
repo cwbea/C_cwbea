@@ -1,0 +1,590 @@
+			POINTERS
+
+	WHAT IS A POINTER AND WHY USE ONE ?
+ A pointer is a variable that holds an address.
+
+The exact form of the pointer is of no consequence to the C programmer, it maybe similar
+to an unsigned integer or it may contain multiple parts, such as a segment and offset (as
+on some intel processors) 
+
+Pointers can be used to point directory reference data often in a more compact and efficient
+way than a direct reference. They are commonly used in C programming for the processing of arrays,
+and are often essential for passing information out of a procedure. It can be difficult to avoid the
+use of pointers for some programming applications.
+
+The indirect nature of pointers can lead to problems. However, programs can be difficult to follow and 
+programs faults can be obscure. Debugging a program that has extensive use of pointers can be a difficult 
+and time consuming operations.
+
+
+	POINTER DECLARATIONS
+
+To divide a pointer variable it is neccessary to define it as pointing to a specific data type.
+
+e.g 	int *iptr;
+	char *cpi, *cpi2;
+	double *addr;
+	struct *taxcode;
+	union machine_ware *state;
+
+The * before the iptr indicates that iptr is a variable that will hold the address of an integer. iptr, itself 
+is not an integer.
+
+It is possible to have a pointer that has the address of another pointer.
+
+e.g 	int **ptrptr;
+
+in this example ptrptr will hold the address of another pointer which, in turn will hold the address of an integer.
+
+Pointers are declared with other types of data declaration, and can be declared in the same statement as single variables 
+and arrays.
+
+e.g int abc, ar[], *ip, x;
+
+
+	
+	ACCEPTING VALUES TO POINTER, THE UNARY  AND '&' OPERATOR 
+
+A pointer can assign the address of a variable by using the & as a unary operator.
+
+e.g 	iptr = &x;	//assigns the address of x to the iptr
+	iptr = &ar[4];	//assigns the address of element 4 of the ar array to iptr
+
+A pointer can be assigned a value from another pointer, possibly with an integer offset to the address.
+
+e.g 	iptr1 = iptr2+3; //assigned to ptr1 an address of the integer 3 integers from the address of iptr2
+
+
+Some compilers will allow assignment of absolute addresses to a pointer.
+
+e.g  	iptr = 0x3750;	//only acceptable on some compilers
+
+All compilers will allow a "no where" address to be assigned using the integer 0. Tests can be made from 
+equivalence to 0.
+
+e.g 	iptr = 0;  //sets the pointer to no where
+	if (iptr != 0) ...;  //if iptr has an address of variable
+
+
+
+	POINTER CASTS
+
+ When assigning the value of one pointer to another, stricly speaking, the pointer will be declared as 
+pointing to the same data type. Some compiler will accept an assignment of pointer to incompatible type,
+but most require a cast to be used. A cast is usually neccessary to sign an absolute value to a pointer. 
+
+e.g 	chptr = (char *) iptr; 	//convert iptr to a char pointer type
+
+	iptr = (int *) 0x37f0;	//make 0x7f30 into an integer address
+
+	
+	
+	INDIRECT REFERENCE IN USING POINTERS : THE UNARY '*' OPERATOR
+
+ To make use of a pointer, a unary is used to mean 
+"what the pointer is pointing at"
+
+i.e if iptr holds the address of x then *iptr will refer to x itself and iptr can be used wherever x could 
+be used.
+
+e.g 	iptr = &x;
+	y = *iptr;	//equivalent to y = x;
+	*iptr = y	//equivalent to x = y;
+
+where a pointer to a pointer has been declared then double indirection can be used. i.e **ptrptr. This 
+is an advanced C facility only recommeneded for advanced programmers.!
+
+NB. The use of *iptr serves no purpose unless iptr has a value assigned to it beforehand. It will not necessarily
+cause an error message to be generated if it has no value previously  assigned, but iptr will have an unpredictable
+value, memory can seem to be randomly accessed and corrupted. This is a common source of erratic program behavior
+that can be difficult to debug.
+
+A pointer should always be given a suitable address before it's used.
+
+
+		
+			VOID POINTERS 
+
+It is possible to define a pointer to void.
+
+This means the pointer is of undefined type. Any address value can be assigned to this type of pointer but it cannot be 
+said what type of variable it points to. i.e The pointer cannot be used with the * operator :
+
+	void *ptr;
+	ptr = &x;	//this statement is ok
+	x = *ptr;	//this statement is illegal
+
+To dereference the pointer value directly to it's type must be changed with a cast
+
+e.g 	x = *(int *)ptr;	//this is a valid statement
+
+Alternatively, the pointer can be assigned to a pointer of any other type which can then be used in the normal way.
+
+	
+
+	INITIALISING POINTERS
+ 
+Pointers may be initialised in local or global declaration to either :
+
+1.	The value 0 
+	e.g 	int *iptr = 0;
+
+2.	Addresses is of previously declared variables 
+	e.g 	char ch;
+		char *chptr = &ch;
+
+N.B  Declaring a pointer on the same line  as a data variable does NOT imply that the pointer has the address of the variable.
+
+i.e 		int i, *ptr1;		//ptr1 does not point at i
+however : 	int j, *ptr2 = &j;	//ptr2 points at j as it has been initialised to do so
+
+The syntax of pointer initialisation can be a little confusing. Despite the way it may appear it is not *ptr2 (what ptr2 point at) 
+that is being initialised, but ptr2 itself.
+
+i.e 	int *ptr2 = &j; is equivalent to int *ptr2;
+					 ptr2 = &j;
+
+	
+	CONSTANT POINTERS AND POINTERS IN CONSTANTS
+
+Both constant pointers and pointers to constants can be defined. The syntax is as follows :
+
+e.g	int x, y;
+	int *const ptr2 = &x;		//a constant pointer
+	const int *ptr1 = &x;		//pointer to a constant
+	int *const ptr1 = &x;	        //constant pointer to a constant
+
+A constant pointer means the pointer, once initialised, cannot be changed. It will always point to the same place. The value of 
+the variable pointed at may change but the pointer itself can't. 
+
+A pointer to a constant assumes that whatever it is pointing is a constant. Whether it really is a constant or not, the pointer 
+cannot be used to change the value of whatever is really pointed at.
+
+A constant pointer to a constant means that the pointer itself cannot be changed and nor can it be used  to change whatever it 
+is pointed at.
+
+i.e 	*ptr1 = 123;	//illegal
+	ptr1 = &y;	//ok
+	
+	*ptr2 = 123;	//ok
+	ptr2 = &y;	//illegal
+
+	*ptr3 = 123	//illegal
+	ptr1  = &y;	//illegal
+
+
+	
+	ADDING INTEGERS TO, AND SUBTRACTING INTEGERS FROM POINTERS
+
+ When an integer, n,  is added to a pointer, the pointer will move on in a memory n  data item of the type that the pointer points to.
+
+i.e	 An integer pointer will point n integers futher on in memory. 
+	 A character pointer will point n characters further on in memory.
+	 A structure pointer will point n structure of the same type further on in memory
+
+	... and similarly for other data types.
+
+e.g  	 int *iptr, arr[10];
+	 iptr = &arr[4];	//iptr has address of arr[4]
+	 iptr++;		//now has the address of arr[5]
+	 iptr = *arr[6] - 3;	//now has the address of arr[3]
+
+
+The above comments would also have been true if ip was a float pointer and arr was a float array, or even if ip was a structure pointer 
+and arr was an array of structures of the same type.
+
+
+	
+	SUBTRACTING POINTERS FROM POINTERS
+
+ If two numbers of the same type are subtracted then the result is the number of data item between the two addresses
+
+e.g 	int *p1, *p2, arr[10], n;
+
+	p1 = &arr[3];
+	p2 = arr[5];
+	n  = *p2 - *p1;	//n is now equals 2
+
+it would be equal to 2, if p1, p2 and arr refer to a type other than integer.
+
+Subtracting pointers of different types would lead to a compile error.
+
+
+
+
+	POINTER ARITHMETIC
+
+ Arithmetic operation on pointers are legal only when it makes logical sense, this applies  also to  constant pointers such as given the 
+ expression &i. Therefore the following are valid : 
+
+1. Adding integers to or subtracting integers from pointers
+ 	e.g	p1  = p2 + 2;	ip--;	p1 = &x - 3;
+
+2. Subtracting pointers from pointers, but if only if both pointers are of the same type 
+	e.g 	n = p1 - p2;	n = p1 - &i;
+
+3. Comparing pointers.
+	e.g 	if (p1 == p2)...;	if (p1 > &x)...;
+
+Adding pointers to pointers, multiplying pointers by integers or other pointers, masking or shifting pointers are all examples of invalid 
+pointer operations. This operation makes no logical sense anyway.
+
+Note : when * and ++ (or --) are used together on a pointer, they have the following meaning 
+
+	*iptr++ 	use what it points at, then increase iptr.  i.e   *(iptr++) 
+	*++iptr		increments iptr, then use what it points at i.e   *(++iptr)
+	++*iptr		increments and use what iptr points at 	    i.e	  ++(*iptr)
+
+
+
+
+	ARRAY NAMES USED AS POINTERS 
+ 
+ An array name when not followed by [] has the value of the address of the start of the array
+
+i.e	int *ip, arr[10];
+	ip = arr;	/*these two statements
+	ip = &arr;	are equivalent */
+
+The array name, therefore is a pointer such that :
+	
+	arr is equivalent to &arr[0]
+	
+	*arr is equivalent to arr[0]
+	
+	arr+3 is equivalent to &arr[3]
+	
+	*(arr+3) is equivalent to arr[3]
+
+The name of an array is a CONSTANT pointer, however,it cannot be used on the left hand side of an assignment 
+
+i.e:	arr = ip;	//this will give a compiler error
+
+
+
+
+
+	POINTERS USED AS ARRAY
+ 
+ A pointer can be used as though it is an array if it is given a suitable address.
+
+e.g 	if the pointer, ip is assigned the array address, ip = arr; then :
+	
+	ip[0] is equivalent to *ip and equivalent to arr[0]
+
+	ip[4] is equivalent to *(ip + 4) and equivalent to arr[4]
+
+
+	
+	if ip is assigned ip = arr + 3; then
+
+	ip[0] is equivalent to *ip and equivalent to arr[3]
+
+	ip[4] is equivalent to *(ip + 4) and equivalent to arr[7]
+
+
+NB:    An array automatically has the reserve name pointing at some reserved memory when it is declared.
+       This is not true for a pointer. If a pointer is to be used like an array then it must be given the 
+       address of some suitable memory such as an array of the same data type.
+
+
+       A POINTER SHOULD ALWAYS BE GIVEN A SUITABLE ADDRESS BEFORE IT IS USED.
+
+
+
+
+
+	POINTERS AND TEXT STRINGS
+ 
+ A constant text string, e.g "Hello There\n", can be replaced in any code statement (such as a printf call)
+by a character array containing characters followed by a null byte. As the character array name is an address
+it follows that a constant string must also correspond to an address.
+
+When the compiler comes across a constant string, such as "hello", it does the following :
+
+1. Stores the letters h e l l o in the data area of memory.
+
+2. Stores a null byte at the end of the string.
+
+3. Uses the address of the stored string in whichever expression used in the text string
+
+   e.g		in the statement :
+	   printf("Hello %s\n", "Fred"); 
+
+the 9 character string "Hello %s\n" and the 4 character string "Fred" are stored in memory each with a following 
+null byte, and it is the addresses of these two strings that are used for the printf parameters.
+
+As far as printf is concerned, the addresses could have been in any form, constant string, array name or pointer.
+
+
+
+
+	SINGLE CHARACTERS AND CHARACTER STRINGS
+
+ It is important not to confuse single characters e.g 'A', and one character strings e.g
+
+ 'A' - corresponds to the ASCII value of the character (65 in this example).
+
+ "A" - corresponds to the address where the character, followed by the null byte, has been stored by the compiler.
+
+Each text muxt be used in the right context :
+
+e.g 	putchar('\n');   printf("\n");
+
+
+
+
+	COMMON MISTAKES WITH STRINGS
+
+ Given a character array, the following mistakes are common :
+
+ Given an array declared as  :
+	
+	char cha[80];
+
+1.	if (cha == "Fred")...;
+
+  This will compile ok but will not compare the contents of the array with the charcaters Fred as intented. Instead
+  the address of the array is compared with the address where "Fred" has been stored by the compiler. It will never be 
+  true whatever is in the array.
+
+
+2.	cha = "Fred";
+
+ This gives a compiler error as this will try to assign the address where "Fred" is stored to the array name. The array
+name is constant and cannot have anything assigned to it. Charcaters cannot be copied in this way.
+
+It is possible to assign a string to a character pointer however :
+
+i.e	Given the pointer declared :
+	
+	char *chptr;
+
+	chptr = "Fred";
+
+This assigns the address where the characters Fred are stored to the character pointer. Note that the characters themseleves
+are not copied anywhere.
+
+	
+	
+	  
+
+		 POINTER TO STRUCTURE OR UNION AND THE -> OPERATOR
+
+ When declaring a structure or union pointer it is necessary to delcare the type of structure that the pointer will point at
+
+e.g	
+	struct {
+		int number;
+		char letter;
+	 
+	 } sptr;		//valid structure pointer
+ 	
+	struct taxcode tptr;    //valid if struct type 'taxcode' has been previously defined
+
+	struct strptr;		//invalid! No structure type
+
+
+ Once a pointer has been declared as a structure or union pointer and it has been assigned a suitable address value, it is 
+possible to access the components of the structure pointed at using the -> operator.
+
+i.e	sptr->number is equivalent to (*sptr).number
+
+ This is of course meaningless unless sptr has been assigned the address of the same type of structure beforehand. If not,the
+compiler will assume the seemingly random value within sptr is the address of a structure and access it accordingly, with the 
+obvious errors as a result.
+
+
+
+	POINTERS TO STRUCTURE OR UNION CONTAINING ARRAYS
+ 
+If a structure contains an array name such as :
+
+  struct bufftype {
+		char buffer[80];
+	 
+	} *bptr;
+
+then the array name bptr->buffer is still an adderess, in this case it is a character pointer. This is effectively a constant,
+and cannot be assigned a value.
+
+It is not possible to step through an array within a structure by incrementing the strutcure pointer. Incrementing the structure
+pointer will cause the pointer to move on to the next STRUCTURE in memory, even though this may be a large step in terms of 
+numerical value of the physical address. To step through the bptr -> buffer array a character pointer will need to be declared
+and assigned:
+
+		chptr = bptr -> buffer;
+
+it is then possible to step the character pointer through the array accessing each elements using *chptr.
+
+
+
+
+	STRUCTURES POINTERS WITHIN STRUCTURES
+
+It is possible to declare a structure that contains a pointer to a structure of the same type as the structure itself.
+
+e.g	struct stype {
+		int x, y, z;
+		struct stype *nextptr;
+		pool[100];
+	}
+	
+  
+Each of the structures within the pool array can hold the address of another structure within the pool. In this way
+it is possible to make long chain of structures in any order. This is an advanced use of the C language, but one that
+is often important in real time programming as a means of queuing blocks of data. This can be a useful method of passing
+information from one processing task to another.
+
+
+
+
+	THE FUNCTIONS MALLOC FOR ALLOCATION MEMORY
+
+ A useful library function for allocating memory to provide extra "links" in a chain of structures is malloc. This function
+has a single parameter giving the size of the new memory requiredand it returns a void pointer to this memory. The function 
+allocates memory that has not been used before. Depending on the system it may allocate new memory not previously allocated 
+to (the program or it may allocate part of a block of memory already reserved for the program known as the "heap". If it is 
+not possible to allocate memory a zero pointer is returned.
+
+ The prototype for this function is given in stdlib.h so it can be automatically included in the program by giving thr extra
+statement, #include <stdlib.h> at the start of the program. Alternatively the prototype can be declared directly using 
+void *malloc(size_t); where size_t is a type definition defined in stdlib.h which usually equates to unsigned long int.
+Header files are explained in details in part B, section 1.5 and type definitions in part A, section 13.4
+
+
+ As the function  returns a void pointer the return value can be assigned to any pointer type. A common use would be to allocate
+the memory for a new structure and assign it to a structure pointer.
+
+e.g	struct stype {
+		int x, y, z;
+		struct stype *nextptr
+		} *chainptr;
+
+	chainptr = malloc(sizeof(struct stype));
+	
+	chainptr -> nextptr = malloc(sizeof(struct stype));
+
+N.B
+
+1. It is important to keep a pointer pointing at the new memory otherwise this memory is "lost" i.e it is still allocated
+   to the program but there is no way of accessing it.
+
+2. Assumptions can be made of the content of the new memory allocated - it will not normally be zero.
+
+3. Assumptions can be made about the position of the new memory- two consecutive memory allocations will not normally
+   allocate consecutive memory. Memory allocated by malloc can be released by calling the function free with a pointer
+   to the memory to be released as it's parameter.
+
+e.g       free(chainptr);  
+
+This function has  a prototype: void free(void*ptr); This is also declared in stdlib.h Further details on memory allocation
+functions is available in part C, section 11.
+
+
+
+		FUNCTIONS NEEDING MORE THAN ONE RETURN VALUE
+
+ The following function may have been written to swap the values of two integers :
+
+		void swap(int x, int y) {
+			int temp = x;
+				x = y;
+				y = temp;
+		}
+
+
+..... But this function will not work! It cannot work as any call in the main program of :
+
+			swap(fred, joe);
+
+will cause a copy of fred to be made in x and a copy of joe in y, swapping the copies has no effect on fred and joe!
+
+
+The return value of the function cannot be used as two values need to be returned. To get round this problem pointers 
+must be used.
+
+
+
+		POINTERS AS FUNCTION PARAMETERS
+
+Consider the function :
+
+	swap(int *xptr, int *yptr) {
+		int temp = *xptr;
+		*xptr = *yptr;
+		*yptr = temp;
+	}
+
+This function requires two address values to be passed to it such as in :
+
+		int fred = 1, joe = 2;
+	     ...swap(&fred, &joe);
+
+This will cause a copy of the addresses of fred and joe to be made. 
+
+The function swaps not the address copies, but what the addresses are pointing at. This means the function swaps the main
+program variables fred and joe.
+
+It does not matter how many times an address is copied, every copy must still point at the same memory location.
+
+By this method it is possible to pass information both in and out of a function via the parameters.
+
+
+
+
+		ARRAYS AS FUNCTION PARAMETERS 
+
+ An array name on it's own without [], is a pointer to the start of the array.
+
+Consider the following function:
+
+	void bubblesort(int arr[10]) {
+		int temp, i, change;
+		do {change = 0;
+			for (i=0; i<9; i++) {
+				if (arr[i] > arr[i + 1]) {
+						temp = arr[i];
+						arr[i] = arr[i + 1];
+						arr[i + 1] = arr[i];
+						change = 1;
+					}
+				}
+			} while (change);
+		}
+
+ This function would be called by, for example :
+
+		int numbers[10];
+	      		....
+		bubblesort(numbers);
+
+Because numbers has the value of the address of the start of the array, it is this address that is copied.
+i.e inside bubblesort the parameter arr must really be a pointer!
+
+
+
+
+		ALTERNATE DECLARATION OF ARRAY PARAMETER
+
+ 'C' knows that when a function parameter is declared to be an array it is really a pointer.
+
+It could equally well have been declared as a pointer in the function :
+
+
+		void bubblesort(int *ar) {
+			int temp, i , change;
+			do {change = 0;
+				for (i=0; i<9; i++) {
+					if (ar[i] > ar[i+1] {
+						temp = ar[i];
+etc.
+
+ The function could still be called with array numbers as a parameter exactly as before.
+
+When it is a function parameter, a one dimensional array and a pointer are exactly equivalent.
+But.... this is not true for other local or global variables where a declaration of an array means:
+
+1. The memory space for the array is reserved.
+
+2. The array name is a constant pointer.
