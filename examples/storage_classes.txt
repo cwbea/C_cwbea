@@ -1,0 +1,229 @@
+			STORAGE CLASSES
+
+	STORAGE CLASSES SPECIFIERS
+ There are 4 so-called "storage class specifiers" in the C language:
+		auto
+		register
+		extern
+		static
+
+ These affect the storage of local and global variables and also functions as follows:
+
+	
+	LOCAL VARIABLE STORAGE CLASS
+ 
+	storage class: auto
+
+ This is the default type for local variables.
+
+ By default, all variables local to functions(including function parameters) are allocated storage on
+the program stack when the function is entered at run-time. This type of storage is known as auto 
+(automatic) and is released as soon as the function or compound statement is exited at run-time.
+
+ This type of storage is known as auto(automatic) and is released as soon as the function or compound
+statement is exited.
+
+ Automatic variables, if not intitialised, contain indeterminate values. Variables of the primitive data
+types(i.e int, char, etc.) or pointers can be initialised, in which case expressions involving constants,
+previously declared variables and functions may be used. An auto local variable structure can be initialised
+if set to another structure of the same type. i.e Anything  used in an assignment can be used to 
+initialise an automatic local variable.
+
+ As the stack may get used for other purposes in between calls to a function, the values of non-initialised 
+local variables will be whatever happens to be in the stack memory. i.e they will be set to zero.
+Furthermore, it is not possible for a function to "remember" the previous value of a variable from the last call
+to the function.
+
+If an auto variable in a function is initialised it is re-initialised every time the function is entered.
+
+As the variables are created when the function is entered this means a new or different variable is created 
+every time a recursive function (i.e a function that calls itself) is called. This makes recursive functions 
+much easier to program.
+
+
+	LOCAL VARIABLE STORAGE CLASS
+
+	storage class : register
+
+ The register storage class specifier is is used for local variables as a hint to the compiler to allocate a register
+if possible, as storage for a simple variable (e.g integer or pointer).
+
+Allocating a variable to a register rather than a memory location means that all action associated with the variable, such
+assigning values to it or using it in an expression, can be executed much more quickly and efficiently by the computer.
+
+ It will not  necessarily  allocate the variable to a register as there may not be any spare registers available. Typically
+an 8 register computer will probably only have three registers available for allocation to register variables, the other
+registers being used for the execution of normal C statements. If there are not enough registers for all variables declared
+with the register storage class the compiler will choose which variables will be put into the registers and which will be stored
+on the stack like ordinary auto variables.
+
+ Use of registers to hold loop counters or the pointers that step through large lists, for example can greatly improve program
+running speed in places.
+
+N.B A major restriction in the use of registers is that it is not possible to take the address of the variable... as the address
+does not exist!
+
+The keyword register goes at the start of the variable definition, 
+e.g
+	register int counter;
+	register char *strptr;
+
+As for auto variables register, variables are initialised every time the function is entered, and if it is not intialised it will 
+contain an unpredictable initial value on entering the function.
+
+
+	LOCAL VARIABLE STORAGE CLASSES
+
+	storage class: static
+
+ Unlike auto and register variables, static local variables have their own permanent memory allocated to them. The memory so 
+allocated is never used for anything else.
+
+This means that:
+
+. If the variable is initialised it is initialised once only before the program starts. It is not re-initialised each time
+the function is entered.
+
+. As the initialisation does not take place while the program is running it is possible to initialise all variable types 
+including arrays and structures in the same ways as global variables  can be initialised.
+
+. Non-intialised static variables are automatically set to zero at the start of the program.
+
+. If the function is recursive, care must be taken to ensure there is no confusion over the use of the static variables as 
+only one variable will exist for all levels of the function call.
+
+The syntax for declaring static variables is similar to that for register variables:
+e.g	
+	static int x, *intptr;
+
+	static char ar[5] = "Fred";
+
+If a local array is initialised or a local structure is initialised other than by copying from another structure the storage class
+automatically defaults to static as in the following examples 
+i.e
+	int my_function(void) {
+		int arr[3] = {100,101,102};
+	}
+
+	/* static array by default */
+
+	struct {
+		int n;
+		char ch;
+	} str = {123,'A'};
+
+	/* static structure by default */
+
+ Static variables are useful for variables that need to remember values of local variables from one call to the next.
+
+e.g
+
+A variable to count the number of times a function has been called.
+
+void PrintErroMessage(char ErrorMessage[]) {
+	static int CallCount = 0;
+	CallCount++;
+	printf("Error %d-%s\n", CallCount, ErrorMessage);
+}
+
+PrintErrorMessage will only be accessiblem within its own source code file. CallCount will be allocated permanent storage
+(initialised to zero) and will maintain a count of the number of times PrintErrorMessage has been called.
+
+
+	GLOBAL VARIABLE STORAGE CLASS
+
+	storage class: Default Global Variables
+
+Ordinary global variables without any storage class specifier have the following properties:
+
+. They have their own memory allocated that is not used by anything else.
+
+. If initialised the initialisation takes place only, before the program starts.
+
+. All variable types, including arrays and structures can be initialised.
+
+. Non- initialised variables are automatically preset to zero.
+
+. They can be used in any function following the declaration in the same source file or in any other source file
+  if they have been declared as extern.
+
+. There can be only one declaration of a global variable of this type for each variable name in the entire program.
+
+
+	GLOBAL VARIABLE STORAGE CLASS
+
+	storage class: extern
+
+ This variable storage specifier is used for variables that need to be used in the current source file, but are also
+declared in another source file as the normal global type.
+
+i.e 
+
+ There is no storage allocated for them as this has been done in another source file.
+
+e.g 
+    extern int count[3];
+
+Note it is not possible to initialise a variable where it is declared as extern- this must be done where it is declared 
+as the the default global type.
+
+There can be as many extern declarations of a variable is required, but there can only be default declaration as that
+is where the associated memory is reserved. It is possible to have more than one extern declaration for the same variable
+in the same source file as the default global definition of the variable. Obviously it is important that the variable type
+in all declarations of any one variable must correspond.
+
+
+	GLOBAL VARIABLE STORAGE CLASS : STATIC
+	
+	storage class: static
+
+ When used on a global variable it's use is similar to that of the default type in that -
+
+. The memory is reserved for each variable and is not used by anything else.
+
+. All variables can be initialised and the initialisation takes place before the program starts.
+
+. Non initialised variables are set to zero.
+
+. They can be used in any function in the same source file following the declaration.
+
+. There can only be one global variable declaration of each name in the source file.
+
+ However, they can not be accessed from different source files i.e The scope of the variables is limited to the source file in which
+they are declared.
+
+If a global variable is declared as static in one source file and is also declared in another source file with the same name, there are 
+two different variables created. Any change made to one will not affect the other.
+
+
+	EXTERN AND STATIC FUNCTION DEFINITION
+
+ The storage specifiers extern and static can also be put on the front of a function definition:
+e.g
+	static int getreply(void) {
+		register char ch = getchar();
+		if(ch == 'Y' || ch == 'y') 
+			return 1;
+		else return 0;
+}
+
+ If a function is specified as class extern, the keyword extern is effectively ignored as all functions default to this class unless 
+specified as static.
+
+Extern or default class functions can be used anywhere in the same source file as they are declared and in any other source file.
+However, if the function is called ina  preceeding function in the same source file as it is defined or it is called in a different
+source file it is necessary to give a declaration prototype at the top of each source file. There can only be one function for any 
+particular name of the clas extern (or default) anywhere in any source file of the program.
+
+Static functions can only be called within the same source file as they are defined.
+
+If a function is specified as static within a source file, a function of the same name may also exist in another source file.
+Tow or more different functions with the same name can exist in this way. In any source file where a static function is defined
+that function will be used when it is called. In any other source file any extern or default class function with that name will be 
+used.
+
+Static functions are used to "hide" a function in a source file. This ensures that it cannot be called from elsewhere in the program
+outside that file - the function is effectively "local" to the source file.
+
+
+ 
