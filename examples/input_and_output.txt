@@ -1,0 +1,165 @@
+		INPUT AND OUTPUT TO FILES
+
+	The Standard Library
+
+ In the same way that there is no input and output to the terminal in C. there is no input or output
+to files in C. All input and output must be done using functions some of which must be written in a language
+other than. There is however, a standard C library with ready made file input and output functions available
+on most systems. This library is in fact the same library used for terminal input and output.
+
+It is necessary to include the header #include <stdio.h> at the top of each C source file which contains any 
+input or output code regardless of whether this is to a file or to the terminal. This normally means this 
+include file header is used in all C source files. (it won't do any harm to use it where it is not needed 
+anyway).
+
+Further details of the input and output functions to file or to the user terminal are given in section C of this
+book.
+
+
+	VARIABLE TYPE FILE, FILE POINTER AND THE FOPEN FUNCTION
+
+ All I/O access to files in "C" is performed using file pointers. A file pointer variable is declared using the 
+type FILE defined in <stdio.h>. For example the declaration statement:
+
+		FILE *fileptr;
+
+will define a file pointer that may then be used to access a file for reading, for writing or for both.
+
+To be able to use a file pointer it must be allocated to a file which at the same time is said to "open" the library
+function fopen as follows:
+
+	fileptr = fopen("MYFILE", "r");
+
+This opens the file with he name MYFILE for reading only. If the file did not exist or could not be opened for any other
+reason fileptr would be set to 0.
+
+The first parameter to fopen can be any constant string, character array or character pointer, the format for the file name
+will depend on the operating system.
+
+The second parameter must also be a string despite usually being a single letter. The second parameter string can be any of:
+
+"r" - open an existing file for reading.
+
+"w" - create a new file and open it for writing.
+
+"a" - open an existing file for appending.
+
+"r+" - open an exisiting file for reading but also allow write access.
+
+"w+" - create a new file and open it for reading and writing.
+
+"a+" - open an existing file for appending but also reading or rewriting.
+
+If an existing file is opened for writing the previous contents are usually overwritten.
+
+
+
+	ACCESSING THE FILE WITH getc, putc, and fprintf
+
+ Once a file has been opened all further access to that file would be done using functions that use the file pointer.
+The file's operating system name is never used again. For example the statement:
+
+	ch = getc(fileptr);
+
+This would read a character from the MYFILE into the integer or character variable ch.
+
+getc is the file function equivalent of getchar. It has the same purpose except that it reads consecutive characters
+from a  file rather than the keyboard. Unlike getchar it needs a single parameter which is a file pointer to tell it 
+which file to read, the file must have been previously opened for reading and associated with the file pointer using
+fopen.
+
+Once the end of the file has been reached, getc will return the value EOF. EOF is a macro defined in the stdio.h that
+usually equates to the value -1.
+
+
+	putc(ch, fileptr);
+	
+	fprintf(fileptr, "\nAnswer = %d", x);
+
+Note that each has an extra file pointer parameter but that this extra parameter comes after the charater in putc
+but before other parameters in fprintf!
+
+NB. The file pointer is not incremented by a call to getc, putc or fprintf when used as above, and no attempt by the
+programmer should be made to increment the file pointer, as it should always remain the same for a given file. This 
+is because the type FILE is actually defined as a structure that is set up by fopen to contain all the information 
+about the file, such as the type of access etc. Any records of position within the file are kept within the structure.
+
+Futher details on these and other file input and output functions are given in section C of this book.
+
+
+
+ 	STDIN, STDOUT AND STDERR STANDARD FILE POINTER
+
+ Three file pointers are defined automatically by the system and are defined in <stdio.h>. These are:
+
+stdin - the standard input file pointer
+
+stdout - the standard output file pointer
+
+stderr - the standard error output file pointer
+
+For normal interactive use, these file pointers are set to the keyboard input for stdin and the computer screen
+output for stdout and stderr. These file pointers are used by the terminal I/O routines getchar, printf etc.
+Terminal I/O could also be performed using the standard file pointers with the file I/O functions.
+e.g
+	ch = getc(stdin);
+
+would be equivalent to 
+
+	ch = getchar();
+
+
+ There is nothing special about the standard file pointers. Other than the fact that they are automatically setup
+without the programmer needing to call fopen they are identical to any other file pointer variable. They can be 
+copied, reassgined or corrupted just as any variable can. For example:
+
+	fileptr = stdout
+	
+ Any file output using file pointer fileptr will now go to the computer screen.
+
+	stdout = fopen("DATAFIL", "w");
+
+Any output from putchar or printf will now go to the file DATAFIL.
+
+	stdin = 0;
+
+It is now impossible to read from the keyboard (without reopening access to the terminal).
+
+
+	COMMAND LINE REDIRECT OF STDIN AND STDOUT
+ 
+ A standard UNIX facility that is also available with many other command line operating systems is to allow 
+redirection of either or both of stdin and stdout from the terminal to a file or other device. This is done using 
+the command line with extra parameters <filename to redirect the input and >filename to redirect the output to the
+given files 
+e.g 	
+	MyProg<MyInFil
+
+ This operating system command would cause the program MyProg to be executed taking all standard input using stdin
+(including getchar) from the file MyInFil instead of the keyboard
+
+	MyProg>MyOutFil
+
+This operating system command would cause the program Myprog to be executed with all standard input using stdout
+(including putchar and printf) going to the file MyOutFil instead of the computer screen. Output to stderr will 
+still go to the computer screen however,
+	
+	MyProg<MyInFil>MyOutFil
+
+This command will cause the program MyProg to be executed with standard input coming from the file MyInFil and 
+standard output going to MyOutFil.
+
+If there are other parameters to the program in the command line the redirection parameters may appear anywhere 
+between the parameters after the program name. They are not included in the count of parameters in argc(described 
+in section 13). They are in fact, invisible to the program.
+
+e.g	 The operating system command:
+	
+	MyProg P1<MyInFil P2>MyOutFil 
+
+ is equivalent to 
+
+	MyProg>MyOutFil<MyInFil P1 P2
+
+In both these cases the program will only be "aware" of the two program parameters. Param1 and Param2. Access to these
+program parameters is described in the next section.
