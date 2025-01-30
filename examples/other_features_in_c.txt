@@ -1,0 +1,289 @@
+		OTHER FEATURES IN C
+
+
+		ENUMERATED TYPE
+
+ ANSI C allows enumerated types to be declared in a similar fashion to PASCAL.
+
+An enumerated type can be declared as follows :
+
+	enum tag {constant1, constant2, constant3,...};
+
+where:  enum is a keyword used to introduce the type declaration.
+
+	tag is an optional user-defined name for the enumerated type.
+
+	constant1... is a list of named constants.
+
+These constansts are the values that a variable of the enumerated type may take:
+
+e.g
+	enum billbard_ball {red, white, spot};
+
+By default, the C compiler will give the first named constant (i.e red) a value of zero, the next a value of one,
+and so on.
+
+The named constants can then be used anywhere in a program where constants are valid
+
+e.g
+	number = red;
+
+The default values for the named constants can be altered by presetting them in the declaration
+
+e.g
+	enum billbard_ball {red = 10, white = 5, spot};
+
+In this example, red will be given the value 10, white 5 and spot 6.
+
+
+
+	ENUM VARIABLE DEFINITION
+ 
+ Variables can be defined to be of an enumerated type in 2 ways:
+
+a. variable definition combined with type declaration:
+
+	enum tag {constant_list variable_list};
+
+	where tag is optional.
+
+e.g
+	enum {red, white, spot} in_play;
+
+	enum billbard_ball {red, white, spot} in_play;
+
+
+b. variable definition using the tag of a previous declaration :
+
+e.g
+	enum tag variable_list;
+
+e.g
+	enum billbard_ball {red, white, spot};
+
+
+
+
+	ENUM WARNING
+
+ C, not being a strongly typed language like PASCAL, does not protect you against simple errors like assigning
+billbard ball colors  to character variables etc. There is nothing to prevent any other variable being assigned a 
+constant from the enum constant list or to prevent or an enum variable being assigned ordinary integer values:
+
+e.g
+	enum billbard_ball {red, white, spot}
+	ball;
+
+	int x;
+
+	x = red;	//valid but confusing!
+
+	ball = 100;	// and so is this
+
+The lack of protection takes away much of the advantage of declaring enumerated type variables. However enumerated
+types can be useful and to improving program clarity so, for example the use of enum as in the example:
+
+	if (ball_in_play == white)...
+
+is more informative than the equivalent : if (ball_in_play == 1)...
+
+
+	DEFINE NEW TYPES WITH TYPEDEF
+
+ Typedef can be used to increase the portability of programs by allowing synonyms to be defined for the primitive
+data types.
+
+for example suppose a target processor has 32-bit integers
+
+The declaration
+	typedef int WORD;
+
+In a program would allow WORD be used as primitive type throughout the program instead of int.
+
+The program could then be ported to a 16-bit processor by changing int to long in the typedef statement.
+
+In addition, program readability can be improved.
+
+The declaration 
+	typedef int COUNTER;
+
+could also allow all loop control variables to be defined as COUNTERS
+
+More complex types can also be defined.
+
+The declarations
+	typedef int* POINT;
+
+	typedef char[20]ARRAY;
+
+would allow integer pointers and twenty element character arrays to be defined using 
+
+POINT first_pointer, second_pointer;
+
+ARRAY name, job_title, department;
+
+Extensive use of typedef has been made in UNIX operating system in C source code.
+
+
+		POINTER TO FUNCTION
+
+It is possible to define a pointer to hold the address of a function rather than a variable
+
+The syntax of the declaration is as in the following examples:
+
+	int(*fnptr)(int,char);	//pointer to a function
+
+This rather off putting declaration fnptr to be a pointer that holds the address of a fucntion that has an 
+integer as it's return value and two parameters, an integer and a character.
+
+As with the declarations of functions themselves it is possible to declare a function pointer wihtout specifying
+the parameter types. This removes all subsequent checking of parameter types when assigning the pointer or using
+it to call a function. This, as for functions, is really a feature left over from the original definition of C
+and it's use is not recommended.
+
+The () round *fnptr are necessary as declaration without brackets,
+
+i.e	int *fnpt();
+
+would define fnptr to be a function that has an integer pointer as it's return value.
+
+Note fnptr is  variable, it is not a function itself, what it points to is considerred to be a function, though
+like all pointers, it will not be sensible to use the function pointer until a suitable address has been assigned 
+to it.
+
+Function pointers may be declared with other variables locally or globally such as in the following: 
+	int x, arr[20], (*fnptr)(int, char), y;
+
+
+
+	ASSIGNING VALUE TO FUNCTION POINTER
+ 
+ Addresses of functions are very rarely known in absolute terms. so it is usual to assign the function address
+using the  name of the function.
+
+Any reference to a function name without it being followed by () is taken as referring to the address of the 
+function. This however, will only work provided the compiler already knows it is a function through some previous
+function prototype or function definition.
+
+e.g 
+	int* (funptr)(char,...); /* Declares the function pointer to point at a function with return type similar to 
+				those of printf */
+
+	int printf(char*,...); // printf prototype lets the compiler know that printf is a fucntion 
+
+	funptr = printf;      // Assigns the address of printf to funptr
+
+it is important that both the return type and the parameter types of the function pointer match the return
+type and parameter types of the function it is assigned to. A compiler error will be generated if there is 
+no match. An exception is if the parameters are omitted in the function pointer declaration, in which case 
+there is no parameter checking when an assignment is made to the pointer or when the pointer is used to call 
+a function.
+
+The above would not have worked for either getchar or putchar as these are macros and not true functions.
+Several standard library functions are not what they first seem, but macros in disguise defined in stdio.h
+or some other header file. It is not possible to have a pointer to a macro.
+
+ 
+	USING FUNCTION POINTER
+ 
+ Once a function pointer has been assigned an address of a function it can be used to call that function
+by using (*FunctionPointerName) in place of the true function name.
+
+e.g
+	int x = 0, (funptr)(char,...); //Declare an integer and a function pointer ptr
+
+	int printf(char*,...); //printf prototype
+
+	funptr = printf; // assign printf address to funptr
+
+	(funptr)("\Answer is %d/n", x); //call printf using the function ptr
+
+For functions without parameters:
+
+float* (myfunptr)(void); //function ptr declared
+
+float* myfunction(void); //function ptr declared 
+
+float* myfunction(void); //prototype for a no parameter function
+
+my funptr = myfunction; //Address of the function assigned
+
+(myfunptr)(); //my function called
+
+The () round *funptr are necessary as otherwise the compiler would try and treat funptr as a 
+function returning a pointer. This would generate a compiler error.
+
+Function pointers can be assigned to each other or passed as parameters to other functions or as return 
+values from other functions in the same way than any other pointer can be used.
+
+It is not possible to do arithmetic with these function pointers, for example it is not possible and makes no 
+logical sense, to increment or decrement a function pointer.
+
+
+
+	ARRAY OF FUNCTION POINTER
+
+ Arrays of function pointers may be declared if a table of function addresses is required, as follows:
+
+	int(*funtable[20])(char[10]);
+
+This would declare a table of 20 function pointers, each pointing to a function with an integer return and 
+an array if characters as the only parameter.
+
+Unfortunately all entries in the table would also have to be declared seperately beforehand, if the table 
+is to be initilaised. 
+
+e.g 
+	int fun1(char[10]), fun2(char[10]),
+	fun3(char[10]), fun4(char[10]),
+	fun5(char[10]), fun6(char[10]),
+	fun7(char[10]), fun8(char[10]);
+
+ int (*funtable[8]) (char[10]) = {fun1, fun2, fun3, fun4, fun5, fun6, fun7, fun8};
+
+This would declare and initialise a table of 8 function pointers.
+
+
+	PROGRAM PARAMETER
+
+ Some operating systems, such as the UNIX operating system will allow any number of arguments which can 
+be passed from the operating system to a C program, by giving the main program function two parameters, in
+the form:
+
+void main (int argc, char *argv[]) {....
+
+argc, an integer, will hold a count of the number of arguments passed to the program. This will include the name 
+by which the program was invoked, so argc will have a mininum value of 1.
+
+argv[] is an array of character pointers. The first character pointer, argv[0]. will point to the first program 
+argument (i.e the name of the program) argv[1] will point to the second program argument and so on 
+
+e.g
+// this program is called "echo" and it prints out any arguments passed to it 
+
+	#include <stdio.h>
+	
+	int main(int argc, *argv[]) {
+	int i;
+
+	for (i = 0; i < argc; i++)
+
+	printf("Argument %d is %s\n", i, argv[i]);
+
+}
+
+
+If the program is called from a command line operating system with > as it's prompt such as in the following
+
+		| > echo Hi there Mum!<
+
+The main function parameter argc would have a value of 4.
+
+The argv array would have 4 pointers pointing at the strings, "echo", "Hi", "there" and "Mum".
+
+The program would output the following to the screen
+
+	Argument 0 is echo
+	Argument 1 is Hi
+	Argument 2 is there
+	Argument 3 is Mum!

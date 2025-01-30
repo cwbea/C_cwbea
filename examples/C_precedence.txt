@@ -1,0 +1,83 @@
+		OPERATORS PRECEDENCE TABLE
+
+GROUP 		OPERATOR		DESCRIPTION			ASSOCIATIVITY
+
+----------------------------------------------------------------------------------------
+
+	         ()			function call 	
+Reference	 []			array element			left to right
+		 .			structure member
+		 ->			member of indirect structure
+
+-----------------------------------------------------------------------------------------
+
+		 +			unary plus
+		 -			unary minus
+		 ++			increment
+		 --			decrement
+		 ~			one's complement
+Unary		 (type)			type cast			right to left
+		 !			logical not
+		 sizeof			size in bytes
+		 *			indirect reference
+		 &			address of a variable
+
+------------------------------------------------------------------------------------------
+
+		 *			multiply
+		 /			divide				left to right
+		 %			modulus
+		 
+Arithmetic	 ---------------------------------------------------------------------------
+
+		 +			add
+		 -			subtract			left to right
+
+----------------------------------------------------------------------------------------------
+
+		 <<			bit shift to the left
+Shift		 >>			bit shift to the right		left to right
+
+------------------------------------------------------------------------------------------------
+
+		 <			less than
+		 <=			less than or equals 
+		 >			greater than			left to right
+		 >=			greater than or equals
+
+Relational	 ------------------------------------------------------------------------------
+
+		 ==			equal
+		 !=			not equal			left to right
+
+-------------------------------------------------------------------------------------------------
+
+		 &			bitwise AND
+     Bit	 |			bitwise OR			left to right
+Manipulation	 ^			bitwise exclusive OR
+
+--------------------------------------------------------------------------------------------------
+
+		&&			logical AND
+Logical		||			logical OR			left to right
+
+-------------------------------------------------------------------------------------------------
+
+Conditional	? :			conditional expression		right to left
+
+--------------------------------------------------------------------------------------------------
+
+		=  +=  -=
+		*= /=  %=
+Assignment	&= |=  ^=		assignment operators		right to left
+		<<=  >>=
+
+----------------------------------------------------------------------------------------------------
+
+Comma		,			multiple evaluation		left to right
+
+----------------------------------------------------------------------------------------------------
+		
+	
+		
+		 		 
