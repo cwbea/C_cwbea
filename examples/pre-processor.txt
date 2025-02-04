@@ -1,0 +1,450 @@
+			THE 'C' PRE-PROCESSOR
+
+	 	The 'C' compiler and pre-processor
+
+ A C compiler consists of 4 parts:
+
+1. A (pre-first pass) preprocessor capable of 
+	a. macro substitution
+	b. file inclusion
+	c. conditional compilation
+
+2. A (first pass) lexical analyser
+
+3. A (second pass) code generator
+
+4. An optional (third pass) optimiser 
+
+On unix systems the cc command is used to invoke the C compiler. By default, cc will invoke the link/loader
+to combine separately compiled files, resolve external references and search libraries for functions that have
+not been defined in the compiled files.
+
+The C preprocessor runs before the C program is compiled properly. It is a separate program from the compiler
+programs and, in theory, could be used on any file not just C source files. It's main uses are macro substitution,
+file inclusion and conditional compilation.
+
+Each source file will normally have a few preprocessor commands, these are strictly speaking, not part of the C
+language itself, though they are associated with the language. The preprocessor commands each start with a # and must
+either fit on a single source line or must be extended with the use of a - at the end of each line to be continued
+
+e.g 
+	#include <stdio.h>
+
+
+	USING #define and #undef FOR MACRO DEFINITION
+
+ If a macro definition of the form
+
+	#define <macro name> <macro text>
+
+occurs in a C program, the preprocessor will replace all subsequent occurrences of <macro name> with <macro text>
+either to the end of the file, or until 
+
+	#undef <macro name>
+
+occurs, if sooner.
+
+e.g
+
+	#define BLOCKSIZE 100
+	#define FALSE 0
+
+	char buffer[BLOCKSIZE];
+
+	if (result == FALSE)
+
+ Although not essential, by convention macro identifiers are written in upper case.
+
+
+
+	THE STANDARD PREDEFINED MACROS AND THE #line STATEMENT
+
+ A number of macros are redefined existing at compile time without the need for any #define pre-processor
+statement. These macros each have a double underscore character at the beginning and end of their names. It is not
+uncommon for other macros or variables to be defined in the standard header files with either a leading single or
+double underscore character. To save confusion and possible error, it is recommended that programmers do not name
+any of their own variables or macros with leading underscore characters.
+
+The standard predefined macros are:
+
+__STDC__  This corresponds to the integer constant 1 if the compiler is a standard C compiler. It is usually 
+used with the #ifdef preprocessor statement described in part B, section 1.10 to test the compiler and issue 
+warnings as necessary.
+
+__TIME__  This corresponds to a string giving the current time of the day in hours, minutes and seconds using a 24
+hour clock as in the example
+		"01:20:30".
+
+__DATE__  This corresponds to a string giving the current date as in the example "Dec 25 1996".
+
+__LINE__  This corresponds to an integer constant corresponding to the line number in the source file being compile.
+This value can be altered using #line pre-processor statement described below.
+
+__FILE__  This corresponds to a string giving he name of the source file being compiled as in the example "myprog.c".
+This value can be altered using the #line pre-processor statement described below.
+
+Note that it is not possible to delete the macros definitions of any of these standard predefined macros using the 
+#undef pre-processor statement.
+
+The following is an example of the use of these macros:
+	printf("The time is now %s on %s\n", _TIME_, _DATE_);
+
+The pre-processor statement:
+
+	#line <number> <filename>
+
+as in:
+ 	#line 100 myfile
+
+alters subsequent values of the _LINE_ and _FILE_ macros. As well as altering the values of these macros the reporting 
+of any compiler errors may also be affected.
+
+
+	MACRO WITH PARAMETER
+ 
+    A	macro can be defined to take the parameters in the form:
+
+	#define <macro name> (<param1><param2>,...) <macro text>
+
+This will define a macro with parameters. In the macro expansion, the <macro text>, when replacing the <macro name>
+will have all instances of <param1>, <param2>,...replaced by corresponding arguments from the macro call.
+
+e.g
+	#define INRANGE(num) (num > 0 && num < 10)
+		if (INRANGE(xyz))...
+
+The last line would be expanded by the preprocessor to if (xyz > 0 && xyz < 10)...
+
+Note that the #must, in theory, occur in column 1 of any line though most compilers will recognise it providing
+it is preceeded by only spaces or tabs.
+
+Although they look like functions when macros are used with parameters they are not the same as functions. The macro 
+text gets substituted for every single macro call, so the corresponding code gets repeated in memory as many times
+as the macro is used.
+
+Functions are only stored in memory once so that jump is made to the function code every time a call is made, with 
+a jump back again on the return.
+
+This property of looking like functions is used in many of the standard libraries.
+getchar and putchar, for example are implemented by many C systems as macros defined with stdio.h rather than true
+functions.
+
+
+	MACRO PARAMETERS EMBEDDED IN STRINGS
+
+ The pre-processor will not recognise a macro name if it is embedded in a string constant 
+e.g
+	int counter = 123;
+
+	#define DEBUG(x) printf("Variable x = %d\n", x);
+
+	DEBUG(counter);
+
+	will give the output
+
+	variable x = 123
+
+	and not the desired:
+
+	variable counter = 123
+
+ To get round this problem the #define statment has the facility to turn any macro parameter into a string
+by inserting a # in front of the parameter in the macro definition. This still does not allow the macro parameter
+to be embedded directly in the string but this can be achieved indirectly using the concatenation of adjacent strings,
+e.g
+
+	int counter = 123;
+
+	#define DEBUG(x) printf("Variable", #x" = %d\n", x);
+
+	DEBUG(counter);
+
+This will expand the macro to:
+	
+	printf("variable" "counter" "= %d\n", counter);
+
+which will give the desired output:
+
+	Variable counter = 123
+
+
+	MACRO PARAMETER EMBEDDED IN NAME 
+ 
+ The pre-processor will not recognise a macro name if it is not embedded in a keyword or variable or function name
+e.g 
+	int *The1stAddress, *The2ndAdress, *The3rdAddress;
+
+	#define NULL(x) The xAddress = 0;
+
+	Null(2nd);  // this will give an error!
+
+The last line will now be expanded to:
+
+	ThexAddress = 0;
+
+which will result in a compilation error as the variable name will be unknown.
+
+TO get round this problem the #define pre-processor statement has the facility to recognise the macro parameter 
+when it is separated from other names by a ##. The $$ itself is eliminated in the expansion.
+e.g
+	int *The1stAddress, *The2ndAddress, *The3rdAddress;
+
+	#define NULL(x) The ##x## Address = 0;
+
+	Null(2nd);
+
+The last line will now be expanded to the desired:
+
+	The2ndAddress = 0;
+
+
+
+	COMMON ERRORS WITH MACRO
+
+ Consider
+	 #define square(x) x*x
+
+if used in 
+	joe = square(fred);
+
+there is no problem as the macro expands to 
+	joe = fred * fred;
+
+problem 1:
+if the macro used in 
+	joe = square(fred + 1);
+
+this becomes:
+	joe = fred + 1 * fred + 1;
+
+Not what was intended!
+This can be cured by putting each variable in () in the macro definition.
+e.g
+	#define square(x) (x) * (x)
+
+if used in :
+	joe = square(fred + 1);
+
+there is no problem as the macro expands to :
+	joe = (fred + 1) * (fred + 1);
+
+problem 2:
+if the macro is used in :
+	joe = square(fred);
+
+this becomes :
+	joe = 1/(fred) * (fred);
+
+which is equivalent to :
+	joe = (1/fred) * fred;
+
+Not what was intended!
+This can be cured by putting the whole macro text in () in the macro definition.
+e.g
+	#define square(x) ((x) * (x))
+
+if used in :
+
+	joe = 1/square(fred);
+
+there is no problem as the macro expands to :
+	joe = 1/((fred) * (fred));
+
+problem 3;
+if the macro is used in :
+	joe = square(fred++);
+
+this becomes:
+	joe = ((fred++) * (fred++));
+
+which will increment fred twice! - Not what was intended!
+
+This last problem cannot be cured! Care must be taken when using this type of embedded assignment
+on a function parameter just in case the function is really a macro _ in which case errors are possible.
+
+
+problem 4:
+Another problem can occur is a " "; is accidentally put on a macro definition:
+e.g 
+	#define square(x) ((x) * (x));
+
+this will not give any problem in :
+	joe = square(fred);
+
+as this will give joe = ((fred) * (fred));;
+i.e the extra ; does no harm.
+But if it is used in : 
+	
+		if (joe == ((fred) * (fred));)....
+
+which will give a syntax error!
+
+
+
+	file INCLUSION WITH THE #include PREPROCESSOR STATEMENT
+
+ The whole of the text from another file can be inserted into the source by using 
+
+	#include.
+e.g
+	#include "filename"
+	#include <filename>
+
+Both examples cause inclusion of the file with the name filename at this line in the source code file.
+
+	#include "prog.h"
+	#include <stdio.h>
+
+if the first form is used, the file is first searched for in a  standard directory.
+
+By convention all included files have a ".h" extension on their name by this is not essential, any
+name could be used. It is possible for an include file to itself have another #include within it up
+to any depth of nesting.
+
+
+	USING THE #include PRE_PROCESSOR STATEMENT
+
+ Many beginners to C pogramming misuses the #include facility.
+
+It is not uncommon for novice C programmers to divide their larger programs into separate source files,
+but then use the #include facility to insert the different sources containing the function definitions
+into the source containing the main function. This means all the source code is compiled together and
+whenever a change is made to the code of one source file the whole program must be recompiled. This is 
+bad practice, It removes one of the principle reasons for splitting the source code in the first place
+the code could just as well have been left in a single source file.
+Good practice dictates a header file should only contain:
+
+* Pre-processor statements such as macro defintions
+
+* Structure, union and enumerated type definitions
+
+* typedef defintions
+* Function prototypes
+* External variable declarations
+
+There should be NO variable declarations without an extern specifier
+There should be NO function definitions of executable code statements
+
+The purpose of the header file used in this way is to ensure consisitency across all source files so that,
+say, no mistake accidentally made in the definition of structure components in different source files.
+
+The way the different source files are compiled into open program will depend on the computer and operating
+system involved but it will often involve putting the names of each file into 
+some form of "project" file or "make" file to signal that each piece of code belongs to the same program.
+
+
+	CONDTIONAL COMPILATION USING #ifdef AND #ifndef
+
+ If the source file has the following:
+
+	#ifdef <macro name> 
+or
+
+	#ifndef <macro name>
+
+the preprocessor will check to see if the macro has been defined in the case of #ifndef.
+In both cases, if the test evaluates to false, all subsequent source lines are ignored by the compiler
+until either of the pre-processor commands, #else or #endif occur.
+
+e.g
+
+#ifdef FLAG
+#include "proj.h"
+#else
+#include <proj.h>
+#endif
+
+if FLAG had already been defined, the current directory would be searched for the file proj.h, otherwise
+the standard directory would be searched. FLAG could be defined earlier in the source file (using #define)
+or it could be defined with a compiler command.(e.g Using the D switch in the compiler command line on a UNIX 
+system.)
+
+A common example of the use of conditional compilation is to permanently include some debugging printf statements
+that are useful when the program is being developed or debugged, but would be superfluous for the normal running
+of the program. The conditional compilation allows these statements to be switched in or out of the program by
+just changing the defintion of one macro.
+
+
+
+	CONDTIONAL COMPILATION USING #if AND #elif
+ 
+ It is possible to make compilation dependent on the value of a macro, providing the macro equates to an integer 
+constant or integer constant expression, as follows:
+
+i.e
+	using:
+
+	#if <expression>
+
+Where <expression> involves integer consants and macros only. Variables and addresses may NOT be included
+in the expression! This will include the code up to the line starting with #endif in the compilation
+providing <expression> evaluates to a non zero result. The #else option may be used between the #if and #endif
+in the same way that it is used with #if and #ifndef.
+
+One or more #elif statements may also be used betwen a #if and #endif. These represent else-if options such that
+the following:
+
+	#if <expression1>   has the meaning:
+
+	    <statements1> if expression1 1 is true insert statements 1
+
+	#elif <expression2> otherwise <statements2> if expression2 is true insert statements2
+
+	#elif <expression3> otherwise <statements3> if expression3 is true insert statements3
+
+	#elseotherwise <statements4> insert statements4
+
+	#endif
+	
+	i.e   only one of the statements 1, 2, 3 or 4 would be included in the resulting source code.
+
+
+Examples
+
+	#ifMAX > 1
+	printf("Please give a number between 1 and %d :", MAX);
+	scanf("%d", &num);
+
+	#else
+	num = 1;
+	#endif
+
+	#if DEBUG
+	printf("num now = %d\n", num);
+	#endif
+
+	#if BOUNDS > LEN + 1
+	for (i = LEN; i < BOUNDS; i++) arr[i] = 0;
+	//pad out rest of buffer
+	#elifBOUNDS = LEN + 1
+	arr[LEN] = 0;  //ENter terminator
+	#else
+	#erro " Value of BOUNDS macro is too small"
+	#endif
+
+In these examples MAX, DEBUG , LEN and BOUNDS would have had to have been previously defined using a #define
+preprocessor statement or by use of a compiler switch. The #erro statement is described in the next section.
+
+
+
+	THE #errror PRE_PROCESSOR STATEMENT
+
+ The #error pre-processor statement is a means of generating a compilation error.
+
+The remainder of the #error statement line will become part of the compiler error messaage that is generated.
+
+i.e  The following pre-processor statement:
+
+#error "Value of BOUNDS macro is too small"
+
+will cause a compilation error with an error message containing:
+
+"Value of BOUNDS macro is too small"
+
+The #error pre-processor statement is normally only used in condtional code following a #if, #ifdef or #ifndef.
+
+
+
+
+
+	

@@ -1,0 +1,195 @@
+	ALPHABETICAL LIST OF FUNCTIONS BY SECTION NUMBER
+
+Section 1: Introduction to the standard 'C' Library
+
+1.1 Standardisation
+
+1.2 stdio.h and other header files
+
+
+Section 2: Output from the the terminal
+
+2.1 putchar
+
+2.2 puts
+
+2.3 printf
+
+
+Section 3: Input from the terminal
+
+3.1 System Differences
+
+3.2 getchar
+
+3.3 gets
+
+3.4 scanf
+
+
+Section 4 : Formatted Conversion in Memory
+
+4.1 sprintf
+
+4.2 sscanf
+
+4.3 atoi, atol and atof
+
+
+Section 5: File Access using File pointers
+
+5.1 fopen
+
+5.2 fclose
+
+5.3 freopen
+
+5.4 fflush
+
+Section 6 : File I/O functions
+
+6.1 fputc
+
+6.2 fgetc and getc
+
+6.3 ungetc
+
+6.4 fputs
+
+6.5 fgets
+
+6.6 fprintf and fscanf
+
+6.7 Binary file I/O. fread and fwrite
+
+6.8 fseek
+
+6.9 rewind
+
+6.10 ftell
+
+6.11 feof
+
+6.12 ferror and clearerr
+
+
+Section 7: File Access Using file Descriptor Numbers
+
+7.1 File Descriptor Numbers
+
+7.2 fileno
+
+7.3 fdopen
+
+7.4 open, creat, close, read, write and lseek
+
+
+Section 8: String Functions 
+
+8.1 strcpy
+
+8.2 strncpy
+
+8.3 strcat
+
+8.4 strncat
+
+8.5 strcmp
+
+8.6 strncmp
+
+8.7 index and strchr
+
+8.8 rindex and strrchr
+
+8.9 strlen
+
+
+Section 9 : Character Functions
+
+9.1 Header for character functions <ctype.h>
+
+9.2 isalpha
+
+9.3 isupper
+
+9.4 islower
+
+9.5 isalnum
+
+9.6 isdigit
+
+9.7 isxdigit
+
+9.8 ispunct
+
+9.9 isspace
+
+9.10 isascii
+
+9.11 iscntrl
+
+9.12 isprint
+
+9.13 isgraph
+
+9.14 toupper
+
+9.15 tolower
+
+
+Section 10:  Mathematical Functions
+
+10.1 The maths library and <math.h>
+
+10.2 abs
+
+10.3 sin, cos and tan
+
+10.4 asin, acos atana and atan2
+
+10.5 sinh, cosh and tanh
+
+10.6 exp, log, log10, pow, sqrt
+
+
+Section 11 : Memory Allocation Functions
+
+11.1 malloc
+
+11.2 calloc
+
+11.3 realloc
+
+11.4 free
+
+
+Section 12 : System Functions
+
+12.1 System Differences
+
+12.2 exit
+
+12.3 system
+
+12.4 sleep
+
+12.5 rand and srand
+
+12.6 setjmp and longjmp
+
+12.7 link
+
+12.8 unlink
+
+
+
+assert.h		ctype.h			errno.h
+
+float.h			limits.h		locale.h
+
+math.h			setjmp.h		signal.h
+
+stdarg.h		stddef.h 		stdio.h
+
+atdlib.h		string.h		time.h
